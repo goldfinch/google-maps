@@ -5,7 +5,7 @@ namespace Goldfinch\Component\Maps\Admin;
 use SilverStripe\Admin\ModelAdmin;
 use JonoM\SomeConfig\SomeConfigAdmin;
 use Goldfinch\Component\Maps\Blocks\MapBlock;
-use Goldfinch\Component\Maps\Models\MapRecord;
+use Goldfinch\Component\Maps\Models\MapPoint;
 use Goldfinch\Component\Maps\Configs\MapConfig;
 use Goldfinch\Component\Maps\Models\MapSegment;
 use SilverStripe\Forms\GridField\GridFieldConfig;
@@ -23,8 +23,8 @@ class MapsAdmin extends ModelAdmin
         MapSegment::class => [
             'title'=> 'Segments',
         ],
-        MapRecord::class => [
-            'title'=> 'Records',
+        MapPoint::class => [
+            'title'=> 'Points',
         ],
         MapBlock::class => [
             'title'=> 'Blocks',

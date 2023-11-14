@@ -11,10 +11,17 @@ Goldfinch\Component\Maps\Models\MapSegment:
     office:
       label: 'Office map'
       settings: true
-      records: true
+      points: true
 ```
 
 2)
+
+.env
+```
+APP_GOOGLE_MAPS_KEY=""
+```
+
+3)
 
 app/_schema/map-{segment_type}.json
 ```
@@ -35,7 +42,7 @@ app/_schema/map-{segment_type}.json
   }
 ```
 
-3)
+4)
 
 themes/{theme}/templates/Components/Maps/{segment_type}.ss
 

@@ -11,8 +11,8 @@
       <% if $getSegmentTypeConfig('settings') %>
         <div class="mb-2"><strong>(config param) Settings:</strong> true</div>
       <% end_if %>
-      <% if $getSegmentTypeConfig('records') %>
-        <div class="mb-2"><strong>(config param) Records:</strong> true</div>
+      <% if $getSegmentTypeConfig('points') %>
+        <div class="mb-2"><strong>(config param) Points:</strong> true</div>
       <% end_if %>
       <% loop $ViewJson($Parameters) %>
         <%-- ... --%>

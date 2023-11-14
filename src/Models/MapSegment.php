@@ -3,7 +3,7 @@
 namespace Goldfinch\Component\Maps\Models;
 
 use Goldfinch\Component\Maps\Blocks\MapBlock;
-use Goldfinch\Component\Maps\Models\MapRecord;
+use Goldfinch\Component\Maps\Models\MapPoint;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\CheckboxField;
@@ -35,13 +35,13 @@ class MapSegment extends DataObject
 
     private static $has_many = [
         'Blocks' => MapBlock::class,
-        'Records' => MapRecord::class,
+        'Points' => MapPoint::class,
     ];
 
     private static $summary_fields = [
         'Title' => 'Title',
         'Type' => 'Type',
-        'RecordsCounter' => 'Records',
+        'PointsCounter' => 'Points',
         'Disabled.NiceAsBoolean' => 'Disabled',
     ];
 
@@ -84,11 +84,11 @@ class MapSegment extends DataObject
         return null;
     }
 
-    public function RecordsCounter()
+    public function PointsCounter()
     {
-        if ($this->getSegmentTypeConfig('records'))
+        if ($this->getSegmentTypeConfig('points'))
         {
-            return $this->Records()->Count();
+            return $this->Points()->Count();
         }
 
         return '-';
@@ -145,10 +145,10 @@ class MapSegment extends DataObject
             'Parameters',
         ]);
 
-        if ($this->getSegmentTypeConfig('records'))
+        if ($this->getSegmentTypeConfig('points'))
         {
-            $recordsGrid = $fields->dataFieldByName('Records');
-            $recordsGrid->getConfig()
+            $pointsGrid = $fields->dataFieldByName('Points');
+            $pointsGrid->getConfig()
                 ->removeComponentsByType(GridFieldDeleteAction::class)
                 ->removeComponentsByType(GridFieldAddNewButton::class)
                 ->removeComponentsByType(GridFieldPrintButton::class)
@@ -161,7 +161,7 @@ class MapSegment extends DataObject
         }
         else
         {
-            $fields->removeByName('Records');
+            $fields->removeByName('Points');
         }
 
         $typesOptions = $this->getSegmentListOfTypes();

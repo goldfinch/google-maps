@@ -2,17 +2,20 @@
 
 namespace Goldfinch\Component\Maps\Models;
 
+use BetterBrief\GoogleMapField;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms\LiteralField;
 
-class MapRecord extends DataObject
+class MapPoint extends DataObject
 {
-    private static $table_name = 'MapRecord';
-    private static $singular_name = 'map record';
-    private static $plural_name = 'map records';
+    private static $table_name = 'MapPoint';
+    private static $singular_name = 'map point';
+    private static $plural_name = 'map points';
 
     private static $db = [
-        'RecordData' => 'Text',
+        'Latitude' => 'Varchar',
+        'Longitude' => 'Varchar',
+        'PointData' => 'Text',
     ];
 
     private static $has_one = [
@@ -54,14 +57,17 @@ class MapRecord extends DataObject
 
         $fields->removeByName([
             'SegmentID',
-            'RecordData',
+            'PointData',
         ]);
 
-        $beautyData = '<pre>'.print_r(json_decode($this->RecordData, true),true).'</pre>';
+        $beautyData = '<pre>'.print_r(json_decode($this->PointData, true),true).'</pre>';
 
-        $fields->addFieldToTab(
+        $fields->addFieldsToTab(
             'Root.Main',
-            LiteralField::create('RecordData', $beautyData),
+            [
+                GoogleMapField::create($this, 'Location'),
+                LiteralField::create('PointData', $beautyData),
+            ],
         );
 
         return $fields;
