@@ -1,5 +1,5 @@
 {
-    "name": "goldfinch/google-maps",
+    "name": "goldfinch/component-maps",
     "description": "",
     "type": "silverstripe-vendormodule",
     "keywords": [
@@ -14,7 +14,8 @@
     "require": {
         "php": ">=8.0",
         "silverstripe/framework": "^5.0",
-        "silverstripe/admin": "^2.0"
+        "silverstripe/admin": "^2.0",
+        "goldfinch/silverstripe-googlemapfield": "^2.2"
     },
     "extra": {
         "expose": [
@@ -23,7 +24,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Goldfinch\\GoogleMaps\\": "src/"
+            "Goldfinch\\Component\\Maps\\": "src/"
         }
     },
     "minimum-stability": "dev",
