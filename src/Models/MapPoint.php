@@ -4,7 +4,6 @@ namespace Goldfinch\Component\Maps\Models;
 
 use BetterBrief\GoogleMapField;
 use SilverStripe\ORM\DataObject;
-use SilverStripe\Forms\LiteralField;
 
 class MapPoint extends DataObject
 {
@@ -60,13 +59,10 @@ class MapPoint extends DataObject
             'PointData',
         ]);
 
-        $beautyData = '<pre>'.print_r(json_decode($this->PointData, true),true).'</pre>';
-
         $fields->addFieldsToTab(
             'Root.Main',
             [
                 GoogleMapField::create($this, 'Location'),
-                LiteralField::create('PointData', $beautyData),
             ],
         );
 
