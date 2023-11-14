@@ -1,3 +1,7 @@
 ---
 Name: goldfinch-google-maps
 ---
+
+Goldfinch\Component\Maps\Admin\MapsAdmin:
+  extensions:
+    - Goldfinch\Helpers\Extensions\BlocksAdminExtension
