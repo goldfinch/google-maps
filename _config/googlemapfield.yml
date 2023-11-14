@@ -1,0 +1,19 @@
+---
+Name: goldfinch-component-maps-googlemapfield
+After: '#googlemapfield'
+---
+BetterBrief\GoogleMapField:
+  default_options:
+    api_key: null
+    show_search_box: true
+    field_names:
+      Latitude: 'Latitude'
+      Longitude: 'Longitude'
+      Zoom: 'Zoom'
+      Bounds: 'Bounds'
+    map:
+      zoom: 14
+    default_field_values:
+      zoom: 5
+      Latitude: -40.74727513499564
+      Longitude: 174.20653527001951
