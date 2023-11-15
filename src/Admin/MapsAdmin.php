@@ -21,7 +21,7 @@ class MapsAdmin extends ModelAdmin
 
     private static $managed_models = [
         MapSegment::class => [
-            'title'=> 'Segments',
+            'title'=> 'Maps',
         ],
         MapPoint::class => [
             'title'=> 'Points',

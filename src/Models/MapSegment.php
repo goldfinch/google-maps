@@ -2,13 +2,14 @@
 
 namespace Goldfinch\Component\Maps\Models;
 
-use Goldfinch\Component\Maps\Blocks\MapBlock;
-use Goldfinch\Component\Maps\Models\MapPoint;
+use BetterBrief\GoogleMapField;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Security\Permission;
+use Goldfinch\Component\Maps\Blocks\MapBlock;
+use Goldfinch\Component\Maps\Models\MapPoint;
 use Goldfinch\JSONEditor\Forms\JSONEditorField;
 use Goldfinch\JSONEditor\ORM\FieldType\DBJSONText;
 use SilverStripe\Forms\GridField\GridFieldPrintButton;
@@ -22,13 +23,16 @@ use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
 class MapSegment extends DataObject
 {
     private static $table_name = 'MapSegment';
-    private static $singular_name = 'map segment';
-    private static $plural_name = 'map segments';
+    private static $singular_name = 'map';
+    private static $plural_name = 'maps';
 
     private static $db = [
         'Title' => 'Varchar',
         'Type' => 'Varchar',
         'Disabled' => 'Boolean',
+        'Latitude' => 'Varchar',
+        'Longitude' => 'Varchar',
+        'Zoom' => 'Int',
 
         'Parameters' => DBJSONText::class,
     ];
@@ -179,6 +183,7 @@ class MapSegment extends DataObject
                     'Type',
                     $typesOptions,
                 ),
+                GoogleMapField::create($this, 'Location'),
             ]
         );
 

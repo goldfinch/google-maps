@@ -14,6 +14,7 @@ class MapPoint extends DataObject
     private static $db = [
         'Latitude' => 'Varchar',
         'Longitude' => 'Varchar',
+        'Zoom' => 'Int',
         'PointData' => 'Text',
     ];
 
