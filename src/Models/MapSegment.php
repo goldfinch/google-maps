@@ -5,9 +5,11 @@ namespace Goldfinch\Component\Maps\Models;
 use BetterBrief\GoogleMapField;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms\TextField;
+use SilverStripe\Core\Environment;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Security\Permission;
+use SilverStripe\ORM\FieldType\DBHTMLText;
 use Goldfinch\Component\Maps\Blocks\MapBlock;
 use Goldfinch\Component\Maps\Models\MapPoint;
 use Goldfinch\JSONEditor\Forms\JSONEditorField;
@@ -43,6 +45,7 @@ class MapSegment extends DataObject
     ];
 
     private static $summary_fields = [
+        'MapThumbnail' => 'Map',
         'Title' => 'Title',
         'Type' => 'Type',
         'PointsCounter' => 'Points',
@@ -86,6 +89,55 @@ class MapSegment extends DataObject
         }
 
         return null;
+    }
+
+    public function MapElement()
+    {
+        $parameters = json_decode($this->Parameters);
+
+        if (!$parameters)
+        {
+            return;
+        }
+
+        $map_height = '';
+        $map_dynamic_load = '';
+
+        if (property_exists($parameters, 'map_height') && $parameters->map_height)
+        {
+            $map_height = 'style="height: '.$parameters->map_height.'px"';
+        }
+
+        if (property_exists($parameters, 'map_dynamic_load') && $parameters->map_dynamic_load)
+        {
+            $map_dynamic_load = '<div id="wrapper" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background-size: cover;">
+            <button class="btn btn-primary">Load Dynamic Map</button></div>';
+        }
+
+        $html = '<div
+          class="map-segment-'.$this->Type.'"
+          data-map-segment="'.$this->ID.'"
+          data-segment=\''.$this->SegmentData().'\'
+          data-parameters=\''.$this->Parameters.'\'
+          '.$map_height.'
+        >'.$map_dynamic_load.'</div>';
+
+        $return = DBHTMLText::create();
+        $return->setValue($html);
+
+        return $return;
+    }
+
+    public function MapThumbnail()
+    {
+        $data = json_decode($this->SegmentData());
+
+        $url = google_maps_preview($data->Latitude, $data->Longitude, $data->Zoom, '260x140');
+
+        $html = DBHTMLText::create();
+        $html->setValue('<img src="' . $url . '" alt="Preview image"/>');
+
+        return $html;
     }
 
     public function PointsCounter()
@@ -237,6 +289,18 @@ class MapSegment extends DataObject
         }
 
         parent::onBeforeWrite();
+    }
+
+    public function SegmentData()
+    {
+        $data = [
+            'Key' => Environment::getEnv('APP_GOOGLE_MAPS_KEY'),
+            'Latitude' => (float) $this->Latitude,
+            'Longitude' => (float) $this->Longitude,
+            'Zoom' => (float) $this->Zoom,
+        ];
+
+        return json_encode($data);
     }
 
     // public function onBeforeDelete()
