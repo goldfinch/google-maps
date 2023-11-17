@@ -5,17 +5,17 @@ namespace Goldfinch\Component\Maps\Models;
 use BetterBrief\GoogleMapField;
 use SilverStripe\ORM\DataObject;
 
-class MapPoint extends DataObject
+class MapMarker extends DataObject
 {
-    private static $table_name = 'MapPoint';
-    private static $singular_name = 'map point';
-    private static $plural_name = 'map points';
+    private static $table_name = 'MapMarker';
+    private static $singular_name = 'marker';
+    private static $plural_name = 'markers';
 
     private static $db = [
         'Latitude' => 'Varchar',
         'Longitude' => 'Varchar',
         'Zoom' => 'Int',
-        'PointData' => 'Text',
+        'MarkerData' => 'Text',
     ];
 
     private static $has_one = [
@@ -57,7 +57,7 @@ class MapPoint extends DataObject
 
         $fields->removeByName([
             'SegmentID',
-            'PointData',
+            'MarkerData',
         ]);
 
         $fields->addFieldsToTab(

@@ -11,7 +11,7 @@ use SilverStripe\Forms\DropdownField;
 use SilverStripe\Security\Permission;
 use SilverStripe\ORM\FieldType\DBHTMLText;
 use Goldfinch\Component\Maps\Blocks\MapBlock;
-use Goldfinch\Component\Maps\Models\MapPoint;
+use Goldfinch\Component\Maps\Models\MapMarker;
 use Goldfinch\JSONEditor\Forms\JSONEditorField;
 use Goldfinch\JSONEditor\ORM\FieldType\DBJSONText;
 use SilverStripe\Forms\GridField\GridFieldPrintButton;
@@ -41,14 +41,14 @@ class MapSegment extends DataObject
 
     private static $has_many = [
         'Blocks' => MapBlock::class,
-        'Points' => MapPoint::class,
+        'Markers' => MapMarker::class,
     ];
 
     private static $summary_fields = [
         'MapThumbnail' => 'Map',
         'Title' => 'Title',
         'Type' => 'Type',
-        'PointsCounter' => 'Points',
+        'MarkersCounter' => 'Markers',
         'Disabled.NiceAsBoolean' => 'Disabled',
     ];
 
@@ -101,26 +101,43 @@ class MapSegment extends DataObject
         }
 
         $map_height = '';
-        $map_dynamic_load = '';
+        $map_dynamic_str = '';
+        $map_inset_overview = '';
 
         if (property_exists($parameters, 'map_height') && $parameters->map_height)
         {
             $map_height = 'style="height: '.$parameters->map_height.'px"';
         }
 
-        if (property_exists($parameters, 'map_dynamic_load') && $parameters->map_dynamic_load)
+        if (property_exists($parameters, 'map_dynamic') && $parameters->map_dynamic)
         {
-            $map_dynamic_load = '<div id="wrapper" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background-size: cover;">
-            <button class="btn btn-primary">Load Dynamic Map</button></div>';
+            $map_dynamic = $parameters->map_dynamic;
+
+            if (property_exists($map_dynamic, 'enabled') && $map_dynamic->enabled)
+            {
+                $map_dynamic_str = '<div id="wrapper" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background-size: cover;">
+                <button class="btn btn-primary">Load Dynamic Map</button></div>';
+            }
         }
 
-        $html = '<div
+        if (property_exists($parameters, 'map_inset_overview') && $parameters->map_inset_overview)
+        {
+            $map_inset_overview = '<div
+              style="display: '.($map_dynamic_str == '' ? 'block' : 'none').'; position: absolute; left: 40px; height: 175px; width: 175px; bottom: 50px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);"
+              class="map-overview-'.$this->Type.'"
+              data-map-overview="'.$this->ID.'"
+            ></div>
+            ';
+        }
+
+        $html = '<div class="map-segment" style="position: relative"><div
           class="map-segment-'.$this->Type.'"
           data-map-segment="'.$this->ID.'"
           data-segment=\''.$this->SegmentData().'\'
           data-parameters=\''.$this->Parameters.'\'
           '.$map_height.'
-        >'.$map_dynamic_load.'</div>';
+        >' . $map_dynamic_str . '</div>' .  $map_inset_overview
+        . '</div>';
 
         $return = DBHTMLText::create();
         $return->setValue($html);
@@ -140,11 +157,11 @@ class MapSegment extends DataObject
         return $html;
     }
 
-    public function PointsCounter()
+    public function MarkersCounter()
     {
-        if ($this->getSegmentTypeConfig('points'))
+        if ($this->getSegmentTypeConfig('markers'))
         {
-            return $this->Points()->Count();
+            return $this->Markers()->Count();
         }
 
         return '-';
@@ -201,10 +218,10 @@ class MapSegment extends DataObject
             'Parameters',
         ]);
 
-        if ($this->getSegmentTypeConfig('points'))
+        if ($this->getSegmentTypeConfig('markers'))
         {
-            $pointsGrid = $fields->dataFieldByName('Points');
-            $pointsGrid->getConfig()
+            $markersGrid = $fields->dataFieldByName('Markers');
+            $markersGrid->getConfig()
                 ->removeComponentsByType(GridFieldDeleteAction::class)
                 ->removeComponentsByType(GridFieldAddNewButton::class)
                 ->removeComponentsByType(GridFieldPrintButton::class)
@@ -217,7 +234,7 @@ class MapSegment extends DataObject
         }
         else
         {
-            $fields->removeByName('Points');
+            $fields->removeByName('Markers');
         }
 
         $typesOptions = $this->getSegmentListOfTypes();
@@ -293,11 +310,29 @@ class MapSegment extends DataObject
 
     public function SegmentData()
     {
+        $parameters = json_decode($this->Parameters);
+
+        $theme = '';
+
+        if ($parameters)
+        {
+            if ($parameters->map_theme->theme && $parameters->map_theme->theme != 'custom')
+            {
+                $theme = BASE_PATH . '/app/_schema/map-styles/' . $parameters->map_theme->theme . '.json';
+
+                if (file_exists($theme))
+                {
+                    $theme = file_get_contents($theme);
+                }
+            }
+        }
+
         $data = [
             'Key' => Environment::getEnv('APP_GOOGLE_MAPS_KEY'),
             'Latitude' => (float) $this->Latitude,
             'Longitude' => (float) $this->Longitude,
             'Zoom' => (float) $this->Zoom,
+            'Theme' => $theme,
         ];
 
         return json_encode($data);

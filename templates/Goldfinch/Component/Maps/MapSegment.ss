@@ -13,8 +13,8 @@ $MapElement
       <% if $getSegmentTypeConfig('settings') %>
         <div class="mb-2"><strong>(config param) Settings:</strong> true</div>
       <% end_if %>
-      <% if $getSegmentTypeConfig('points') %>
-        <div class="mb-2"><strong>(config param) Points:</strong> true</div>
+      <% if $getSegmentTypeConfig('markers') %>
+        <div class="mb-2"><strong>(config param) Markers:</strong> true</div>
       <% end_if %>
       <% loop $ViewJson($Parameters) %>
         <%-- ... --%>

@@ -11,7 +11,7 @@ Goldfinch\Component\Maps\Models\MapSegment:
     office:
       label: 'Office map'
       settings: true
-      points: true
+      markers: true
 ```
 
 2)
