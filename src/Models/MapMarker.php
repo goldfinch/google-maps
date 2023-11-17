@@ -4,6 +4,12 @@ namespace Goldfinch\Component\Maps\Models;
 
 use BetterBrief\GoogleMapField;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\Forms\TextField;
+use SilverStripe\Security\Permission;
+use SilverStripe\ORM\FieldType\DBHTMLText;
+use Goldfinch\Component\Maps\Models\MapSegment;
+use Goldfinch\JSONEditor\Forms\JSONEditorField;
+use Goldfinch\JSONEditor\ORM\FieldType\DBJSONText;
 
 class MapMarker extends DataObject
 {
@@ -12,10 +18,12 @@ class MapMarker extends DataObject
     private static $plural_name = 'markers';
 
     private static $db = [
+        'Title' => 'Varchar',
         'Latitude' => 'Varchar',
         'Longitude' => 'Varchar',
         'Zoom' => 'Int',
-        'MarkerData' => 'Text',
+
+        'Parameters' => DBJSONText::class,
     ];
 
     private static $has_one = [
@@ -23,6 +31,8 @@ class MapMarker extends DataObject
     ];
 
     private static $summary_fields = [
+        'MapThumbnail' => 'Map',
+        'Title' => 'Title',
         'Created' => 'Received at',
         'Segment.Type' => 'Type',
     ];
@@ -49,6 +59,16 @@ class MapMarker extends DataObject
     // private static $field_descriptions = [];
     // private static $required_fields = [];
 
+    public function MapThumbnail()
+    {
+        $url = google_maps_preview($this->Latitude, $this->Longitude, $this->Zoom, '260x140');
+
+        $html = DBHTMLText::create();
+        $html->setValue('<img src="' . $url . '" alt="Preview image"/>');
+
+        return $html;
+    }
+
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
@@ -57,15 +77,33 @@ class MapMarker extends DataObject
 
         $fields->removeByName([
             'SegmentID',
-            'MarkerData',
+            'Parameters',
         ]);
 
         $fields->addFieldsToTab(
             'Root.Main',
             [
+                TextField::create('Title', 'Title'),
                 GoogleMapField::create($this, 'Location'),
             ],
         );
+
+        if ($this->ID)
+        {
+            $schemaParamsPath = BASE_PATH . '/app/_schema/mapmarker.json';
+
+            if (file_exists($schemaParamsPath))
+            {
+                $schemaParams = file_get_contents($schemaParamsPath);
+
+                $fields->addFieldsToTab(
+                    'Root.Settings',
+                    [
+                        JSONEditorField::create('Parameters', 'Parameters', $this, [], '{}', null, $schemaParams),
+                    ]
+                );
+            }
+        }
 
         return $fields;
     }
