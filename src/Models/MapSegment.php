@@ -10,15 +10,18 @@ use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Security\Permission;
 use SilverStripe\ORM\FieldType\DBHTMLText;
+use SilverStripe\Forms\GridField\GridField;
 use Goldfinch\Component\Maps\Blocks\MapBlock;
 use Goldfinch\Component\Maps\Models\MapMarker;
 use Goldfinch\JSONEditor\Forms\JSONEditorField;
 use Goldfinch\JSONEditor\ORM\FieldType\DBJSONText;
+use SilverStripe\Forms\GridField\GridFieldDataColumns;
 use SilverStripe\Forms\GridField\GridFieldPrintButton;
 use SilverStripe\Forms\GridField\GridFieldAddNewButton;
 use SilverStripe\Forms\GridField\GridFieldDeleteAction;
 use SilverStripe\Forms\GridField\GridFieldExportButton;
 use SilverStripe\Forms\GridField\GridFieldImportButton;
+use Goldfinch\Helpers\Forms\GridField\GridFieldManyManyConfig;
 use Symbiote\GridFieldExtensions\GridFieldConfigurablePaginator;
 use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
 
@@ -41,7 +44,16 @@ class MapSegment extends DataObject
 
     private static $has_many = [
         'Blocks' => MapBlock::class,
+    ];
+
+    private static $many_many = [
         'Markers' => MapMarker::class,
+    ];
+
+    private static $many_many_extraFields = [
+        'Markers' => [
+            'SortOrder' => 'Int',
+        ]
     ];
 
     private static $summary_fields = [
@@ -273,6 +285,26 @@ class MapSegment extends DataObject
             }
         }
 
+        $fields->addFieldsToTab(
+          'Root.Markers',
+          [
+              GridField::create(
+                'Markers',
+                'Markers',
+                $this->Markers(),
+                $cfg = GridFieldManyManyConfig::create(),
+              )
+          ]
+        );
+
+        $dataColumns = $cfg->getComponentByType(GridFieldDataColumns::class);
+
+        $dataColumns->setDisplayFields([
+            'MapThumbnail' => 'Map',
+            'Title' => 'Title',
+            'Created' => 'Received at'
+        ]);
+
         if ($this->getSegmentTypeConfig('settings'))
         {
             $fields->addFieldsToTab(
@@ -308,6 +340,23 @@ class MapSegment extends DataObject
         parent::onBeforeWrite();
     }
 
+    public function MarkersData()
+    {
+        $data = [];
+
+        foreach ($this->Markers() as $marker)
+        {
+            $data[] = [
+                'Title' => $marker->Title,
+                'Latitude' => (float) $marker->Latitude,
+                'Longitude' => (float) $marker->Longitude,
+                'Parameters' => $marker->Parameters,
+            ];
+        }
+
+        return $data;
+    }
+
     public function SegmentData()
     {
         $parameters = json_decode($this->Parameters);
@@ -332,6 +381,7 @@ class MapSegment extends DataObject
             'Latitude' => (float) $this->Latitude,
             'Longitude' => (float) $this->Longitude,
             'Zoom' => (float) $this->Zoom,
+            'Markers' => $this->MarkersData(),
             'Theme' => $theme,
         ];
 

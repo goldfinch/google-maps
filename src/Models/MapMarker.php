@@ -26,15 +26,15 @@ class MapMarker extends DataObject
         'Parameters' => DBJSONText::class,
     ];
 
-    private static $has_one = [
-        'Segment' => MapSegment::class,
-    ];
-
     private static $summary_fields = [
         'MapThumbnail' => 'Map',
         'Title' => 'Title',
         'Created' => 'Received at',
         'Segment.Type' => 'Type',
+    ];
+
+    private static $belongs_many_many = [
+        'Segments' => MapSegment::class,
     ];
 
     // private static $belongs_to = [];
