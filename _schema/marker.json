@@ -1,0 +1,24 @@
+{
+    "type": "object",
+    "options": {},
+    "properties": {
+      "advancedMarkerElement": {
+        "title": "Advanced marker",
+        "type": "boolean",
+        "format": "checkbox",
+        "description": "Requiers Map ID set up in the map settings",
+        "default": false
+      },
+      "infoWindow": {
+        "title": "Info Window",
+        "type": "boolean",
+        "format": "checkbox",
+        "default": false
+      },
+      "title": {
+        "title": "Title",
+        "type": "string",
+        "default": ""
+      }
+    }
+  }

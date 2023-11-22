@@ -270,7 +270,7 @@ class MapSegment extends DataObject
 
         if ($this->ID && $this->Type)
         {
-            $schemaParamsPath = BASE_PATH . '/app/_schema/' . 'map-' . $this->Type . '.json';
+            $schemaParamsPath = BASE_PATH . '/vendor/goldfinch/component-maps/_schema/' . 'map.json';
 
             if (file_exists($schemaParamsPath))
             {
@@ -367,7 +367,7 @@ class MapSegment extends DataObject
         {
             if ($parameters->map_theme->theme && $parameters->map_theme->theme != 'custom')
             {
-                $theme = BASE_PATH . '/app/_schema/map-styles/' . $parameters->map_theme->theme . '.json';
+                $theme = BASE_PATH . '/vendor/goldfinch/component-maps/_schema/map-styles/' . $parameters->map_theme->theme . '.json';
 
                 if (file_exists($theme))
                 {

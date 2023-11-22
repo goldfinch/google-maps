@@ -49,3 +49,31 @@ themes/{theme}/templates/Components/Maps/{segment_type}.ss
 ```
 my custom template for specific segment type
 ```
+
+---- 
+
+
+1) Option one (import)
+
+package.json
+```
+"@googlemaps/js-api-loader": "^1.16.2",
+```
+
+app.js
+```
+import GoogleMap from '..../vendor/goldfinch/component-maps/client/src/src/map-mod';
+
+document.addEventListener('DOMContentLoaded', () => {
+  new GoogleMap();
+});
+```
+
+2) Option two (Silverstripe requirement)
+```
+<% require javascript('goldfinch/component-maps:client/dist/map.js') %>
+```
+or
+```
+Requirements::javascript('goldfinch/component-maps:client/dist/map.js');
+```

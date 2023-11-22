@@ -90,7 +90,7 @@ class MapMarker extends DataObject
 
         if ($this->ID)
         {
-            $schemaParamsPath = BASE_PATH . '/app/_schema/mapmarker.json';
+            $schemaParamsPath = BASE_PATH . '/vendor/goldfinch/component-maps/_schema/marker.json';
 
             if (file_exists($schemaParamsPath))
             {
