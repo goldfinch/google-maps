@@ -6,4 +6,3 @@ composer.lock
 *.css.map
 yarn-error.log
 package-lock.json
-hot
