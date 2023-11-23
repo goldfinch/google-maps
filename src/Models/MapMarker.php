@@ -2,11 +2,14 @@
 
 namespace Goldfinch\Component\Maps\Models;
 
+use SilverStripe\Assets\File;
 use BetterBrief\GoogleMapField;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms\TextField;
+use SilverStripe\Forms\DropdownField;
 use SilverStripe\Security\Permission;
 use SilverStripe\ORM\FieldType\DBHTMLText;
+use SilverStripe\AssetAdmin\Forms\UploadField;
 use Goldfinch\Component\Maps\Models\MapSegment;
 use Goldfinch\JSONEditor\Forms\JSONEditorField;
 use Goldfinch\JSONEditor\ORM\FieldType\DBJSONText;
@@ -22,6 +25,7 @@ class MapMarker extends DataObject
         'Latitude' => 'Varchar',
         'Longitude' => 'Varchar',
         'Zoom' => 'Int',
+        'InfoWindowTemplate' => 'Varchar',
 
         'Parameters' => DBJSONText::class,
     ];
@@ -35,6 +39,14 @@ class MapMarker extends DataObject
 
     private static $belongs_many_many = [
         'Segments' => MapSegment::class,
+    ];
+
+    private static $has_one = [
+        'Icon' => File::class,
+    ];
+
+    private static $owns = [
+        'Icon',
     ];
 
     // private static $belongs_to = [];
@@ -59,6 +71,11 @@ class MapMarker extends DataObject
     // private static $field_descriptions = [];
     // private static $required_fields = [];
 
+    public function getInfoWindowTemplate()
+    {
+        return $this->renderWith('Components/Maps/InfoWindows/' . $this->InfoWindowTemplate . '.ss');
+    }
+
     public function MapThumbnail()
     {
         $url = google_maps_preview($this->Latitude, $this->Longitude, $this->Zoom, '260x140');
@@ -80,11 +97,38 @@ class MapMarker extends DataObject
             'Parameters',
         ]);
 
+        $infoWindowTemplates = [
+            '' => '-',
+        ];
+
+        // scan for template files
+        $dir = THEMES_PATH . '/' . ss_theme() . '/templates/Components/Maps/InfoWindows/';
+
+        if (is_dir($dir))
+        {
+            $files = scandir($dir);
+
+            if (count($files))
+            {
+                foreach($files as $file)
+                {
+                    if (substr($file, -3) == '.ss')
+                    {
+                        $name = substr($file, 0, -3);
+
+                        $infoWindowTemplates[] = $name;
+                    }
+                }
+            }
+        }
+
         $fields->addFieldsToTab(
             'Root.Main',
             [
                 TextField::create('Title', 'Title'),
                 GoogleMapField::create($this, 'Location'),
+                UploadField::create('Icon', 'Icon'),
+                DropdownField::create('InfoWindowTemplate', 'Info Window Template', $infoWindowTemplates)->setDescription('Info Window option in Settings needs  to be enabled for this to work.<br>Place your template in `/themes/{theme}/templates/Components/Maps/InfoWindows/you_template_name.ss`'),
             ],
         );
 

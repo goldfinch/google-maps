@@ -348,6 +348,8 @@ class MapSegment extends DataObject
         {
             $data[] = [
                 'Title' => $marker->Title,
+                'Icon' => $marker->Icon()->exists() ? $marker->Icon()->getURL() : null,
+                'InfoWindow' => $marker->getInfoWindowTemplate(),
                 'Latitude' => (float) $marker->Latitude,
                 'Longitude' => (float) $marker->Longitude,
                 'Parameters' => $marker->Parameters,
