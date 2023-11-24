@@ -346,10 +346,12 @@ class MapSegment extends DataObject
 
         foreach ($this->Markers() as $marker)
         {
+            $iw = $marker->infoWindow();
+
             $data[] = [
                 'Title' => $marker->Title,
                 'Icon' => $marker->Icon()->exists() ? $marker->Icon()->getURL() : null,
-                'InfoWindow' => $marker->getInfoWindowTemplate(),
+                'InfoWindow' => $iw ? $iw->RAW() : null,
                 'Latitude' => (float) $marker->Latitude,
                 'Longitude' => (float) $marker->Longitude,
                 'Parameters' => $marker->Parameters,

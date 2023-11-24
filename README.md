@@ -1,3 +1,7 @@
+TODO
+
+* Marker Font Icon [checked] - hide scale w/h ancho x/y
+
 1)
 
 app/_config/component-maps.yml
@@ -50,6 +54,14 @@ themes/{theme}/templates/Components/Maps/{segment_type}.ss
 my custom template for specific segment type
 ```
 
+---
+
+InfoWindow template
+
+```
+themes/{theme}/templates/Components/Maps/InfoWindows/my_infowindow_template.ss
+```
+
 ---- 
 
 
@@ -76,4 +88,26 @@ document.addEventListener('DOMContentLoaded', () => {
 or
 ```
 Requirements::javascript('goldfinch/component-maps:client/dist/map.js');
+```
+
+---
+
+# Callbacks
+
+*[Map events](https://developers.google.com/maps/documentation/javascript/events)
+*[Marker events](https://developers.google.com/maps/documentation/javascript/reference/marker#Marker-Events)
+*[AdvancedMarkerElement events](https://developers.google.com/maps/documentation/javascript/reference/advanced-markers#AdvancedMarkerElement-Events)
+*[Info Window events](https://developers.google.com/maps/documentation/javascript/reference/info-window#InfoWindow-Events)
+```
+window.goldfinch = {}
+
+window.goldfinch.map_callback = (map, mapSettings, segment, parameters) => {
+  // ..
+}
+window.goldfinch.marker_callback = (marker, markerParams, e, map, segment, parameters) => {
+  // ..
+}
+window.goldfinch.infoWindow_callback = (infoWindow, infowindowParams, marker, map, e, segment, parameters) => {
+  // ..
+}
 ```

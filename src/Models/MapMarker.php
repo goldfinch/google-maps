@@ -34,7 +34,7 @@ class MapMarker extends DataObject
         'MapThumbnail' => 'Map',
         'Title' => 'Title',
         'Created' => 'Received at',
-        'Segment.Type' => 'Type',
+        'Segments.First.Type' => 'Type',
     ];
 
     private static $belongs_many_many = [
@@ -71,9 +71,22 @@ class MapMarker extends DataObject
     // private static $field_descriptions = [];
     // private static $required_fields = [];
 
-    public function getInfoWindowTemplate()
+    public function infoWindow()
     {
-        return $this->renderWith('Components/Maps/InfoWindows/' . $this->InfoWindowTemplate . '.ss');
+        $path = 'Components/Maps/InfoWindows/' . $this->InfoWindowTemplate;
+
+        if (!ss_theme_template_file_exists($path))
+        {
+            return null;
+        }
+
+        // ! important check: this mthod will be called within the admin for summary_fields data, therefore `renderWith` will through an error. To avoid this, the check below determins the raugh difference between the admin and the frontend call.
+        if (array_key_exists('', $this->sourceQueryParams) && $this->sourceQueryParams[''] == null)
+        {
+            return null;
+        }
+
+        return $this->renderWith($path);
     }
 
     public function MapThumbnail()
@@ -116,7 +129,7 @@ class MapMarker extends DataObject
                     {
                         $name = substr($file, 0, -3);
 
-                        $infoWindowTemplates[] = $name;
+                        $infoWindowTemplates[$name] = $name;
                     }
                 }
             }
