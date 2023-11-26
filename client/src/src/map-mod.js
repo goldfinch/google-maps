@@ -205,7 +205,7 @@ class GoogleMap {
           if (e.Parameters.marker_type.markerType == 'AdvancedMarker' && AdvancedMarkerElement) {
 
             // AdvancedMarker
-            console.log('AdvancedMarker')
+            // console.log('AdvancedMarker')
 
             if (e.Parameters.marker_type.markerCustomHTML && e.InfoWindow) {
 
@@ -227,7 +227,7 @@ class GoogleMap {
 
           } else {
 
-            console.log('Marker')
+            // console.log('Marker')
 
             // Marker
 
