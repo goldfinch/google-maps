@@ -63,6 +63,7 @@
           "title": "Pre-defined theme style",
           "type": "string",
           "default": "",
+          "description": "styles apply only when there is no `Map ID` specified",
           "format": "select",
           "enum": [
             "",

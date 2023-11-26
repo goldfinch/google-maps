@@ -197,6 +197,11 @@ class GoogleMap {
             title: e.Title,
           };
 
+          if (typeof e.Parameters !== 'object') {
+
+            e.Parameters = JSON.parse(e.Parameters)
+          }
+
           if (e.Parameters.marker_type.markerType == 'AdvancedMarker' && AdvancedMarkerElement) {
 
             // AdvancedMarker
