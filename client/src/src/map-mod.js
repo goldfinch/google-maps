@@ -277,8 +277,7 @@ class GoogleMap {
 
             // animation
             if (e.Parameters && e.Parameters.marker_type.markerAnimation) {
-              let aniationCall = 'google.maps.Animation.' + e.Parameters.marker_type.markerAnimation;
-              markerParams.animation = eval(aniationCall);
+              markerParams.animation = google.maps.Animation[e.Parameters.marker_type.markerAnimation];
             }
 
             // init marker
