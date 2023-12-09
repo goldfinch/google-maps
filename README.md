@@ -75,10 +75,20 @@ package.json
 app.js
 ```
 import GoogleMap from '..../vendor/goldfinch/component-maps/client/src/src/map-mod';
+// import GoogleMap from '@goldfinch-maps/src/map-mod';
 
 document.addEventListener('DOMContentLoaded', () => {
   new GoogleMap();
 });
+```
+
+--- with alias @goldfinch-maps
+```
+resolve: {
+  alias: [
+    { find: '@goldfinch-maps', replacement: fileURLToPath(new URL('./vendor/goldfinch/component-maps/client/src', import.meta.url)) },
+  ],
+},
 ```
 
 2) Option two (Silverstripe requirement)
