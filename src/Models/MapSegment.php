@@ -285,25 +285,28 @@ class MapSegment extends DataObject
             }
         }
 
-        $fields->addFieldsToTab(
-          'Root.Markers',
-          [
-              GridField::create(
-                'Markers',
-                'Markers',
-                $this->Markers(),
-                $cfg = GridFieldManyManyConfig::create(),
-              )
-          ]
-        );
+        if ($this->ID)
+        {
+            $fields->addFieldsToTab(
+              'Root.Markers',
+              [
+                  GridField::create(
+                    'Markers',
+                    'Markers',
+                    $this->Markers(),
+                    $cfg = GridFieldManyManyConfig::create(),
+                  )
+              ]
+            );
 
-        $dataColumns = $cfg->getComponentByType(GridFieldDataColumns::class);
+            $dataColumns = $cfg->getComponentByType(GridFieldDataColumns::class);
 
-        $dataColumns->setDisplayFields([
-            'MapThumbnail' => 'Map',
-            'Title' => 'Title',
-            'Created' => 'Received at'
-        ]);
+            $dataColumns->setDisplayFields([
+                'MapThumbnail' => 'Map',
+                'Title' => 'Title',
+                'Created' => 'Received at'
+            ]);
+        }
 
         if ($this->getSegmentTypeConfig('settings'))
         {
