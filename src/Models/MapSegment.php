@@ -38,6 +38,7 @@ class MapSegment extends DataObject
         'Latitude' => 'Varchar',
         'Longitude' => 'Varchar',
         'Zoom' => 'Int',
+        'HideMapField' => 'Boolean',
 
         'Parameters' => DBJSONText::class,
     ];
@@ -81,6 +82,7 @@ class MapSegment extends DataObject
     // * goldfinch/helpers
     // private static $field_descriptions = [];
     private static $required_fields = [
+        'Title',
         'Type',
     ];
 
@@ -161,19 +163,12 @@ class MapSegment extends DataObject
 
     public function MapThumbnail()
     {
-        if (ss_env('APP_GOOGLE_MAPS_KEY'))
-        {
-            $data = json_decode($this->SegmentData());
+        $data = json_decode($this->SegmentData());
 
-            $url = google_maps_preview($data->Latitude, $data->Longitude, $data->Zoom, '260x140');
+        $url = google_maps_preview($data->Latitude, $data->Longitude, $data->Zoom, '260x140');
 
-            $html = DBHTMLText::create();
-            $html->setValue('<img src="' . $url . '" alt="Preview image"/>');
-        }
-        else
-        {
-            $html = '-';
-        }
+        $html = DBHTMLText::create();
+        $html->setValue('<img src="' . $url . '" alt="Preview image"/>');
 
         return $html;
     }
@@ -232,11 +227,19 @@ class MapSegment extends DataObject
     {
         $fields = parent::getCMSFields();
 
+        $Latitude = $fields->dataFieldByName('Latitude');
+        $Longitude = $fields->dataFieldByName('Longitude');
+        $Zoom = $fields->dataFieldByName('Zoom');
+
         $fields->removeByName([
             'Title',
             'Type',
             'Disabled',
             'Parameters',
+            'Latitude',
+            'Longitude',
+            'Zoom',
+            'HideMapField',
         ]);
 
         if ($this->getSegmentTypeConfig('markers'))
@@ -260,21 +263,35 @@ class MapSegment extends DataObject
 
         $typesOptions = $this->getSegmentListOfTypes();
 
+        $mainFields = [
+          TextField::create(
+              'Title',
+              'Title'
+          ),
+          CheckboxField::create('Disabled', 'Disabled')->setDescription('hide this map across the website'),
+          DropdownField::create(
+              'Type',
+              'Type',
+              $typesOptions ?? [],
+          ),
+          CheckboxField::create('HideMapField', 'Hide map iframe')->setDescription('Dev option: use it if you experience issues on this page due to embed Google Maps. This switch allows you to temporarily hide Google Maps embedding from this page.'),
+        ];
+
+        if (!$this->HideMapField)
+        {
+            $mainFields = array_merge($mainFields, [
+              GoogleMapField::create($this, 'Location'),
+            ]);
+        }
+
+        $mainFields = array_merge($mainFields, [
+          $Latitude,
+          $Longitude,
+          $Zoom,
+        ]);
+
         $fields->addFieldsToTab(
-            'Root.Main',
-            [
-                TextField::create(
-                    'Title',
-                    'Title'
-                ),
-                CheckboxField::create('Disabled', 'Disabled')->setDescription('hide this map across the website'),
-                DropdownField::create(
-                    'Type',
-                    'Type',
-                    $typesOptions ?? [],
-                ),
-                GoogleMapField::create($this, 'Location'),
-            ]
+            'Root.Main', $mainFields,
         );
 
         if ($this->ID && $this->Type)

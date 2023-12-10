@@ -6,6 +6,7 @@ use SilverStripe\Assets\File;
 use BetterBrief\GoogleMapField;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms\TextField;
+use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Security\Permission;
 use SilverStripe\ORM\FieldType\DBHTMLText;
@@ -26,6 +27,7 @@ class MapMarker extends DataObject
         'Longitude' => 'Varchar',
         'Zoom' => 'Int',
         'InfoWindowTemplate' => 'Varchar',
+        'HideMapField' => 'Boolean',
 
         'Parameters' => DBJSONText::class,
     ];
@@ -69,7 +71,9 @@ class MapMarker extends DataObject
 
     // * goldfinch/helpers
     // private static $field_descriptions = [];
-    // private static $required_fields = [];
+    private static $required_fields = [
+        'Title',
+    ];
 
     public function infoWindow()
     {
@@ -105,9 +109,17 @@ class MapMarker extends DataObject
 
         $fields = $fields->makeReadonly();
 
+        $Latitude = $fields->dataFieldByName('Latitude');
+        $Longitude = $fields->dataFieldByName('Longitude');
+        $Zoom = $fields->dataFieldByName('Zoom');
+
         $fields->removeByName([
             'SegmentID',
             'Parameters',
+            'Latitude',
+            'Longitude',
+            'Zoom',
+            'HideMapField',
         ]);
 
         $infoWindowTemplates = [
@@ -135,14 +147,28 @@ class MapMarker extends DataObject
             }
         }
 
+        $mainFields = [
+          TextField::create('Title', 'Title'),
+          UploadField::create('Icon', 'Icon'),
+          DropdownField::create('InfoWindowTemplate', 'Info Window Template', $infoWindowTemplates)->setDescription('Info Window option in Settings needs  to be enabled for this to work.<br>Place your template in `/themes/{theme}/templates/Components/Maps/InfoWindows/you_template_name.ss`'),
+          CheckboxField::create('HideMapField', 'Hide map iframe')->setDescription('Dev option: use it if you experience issues on this page due to embed Google Maps. This switch allows you to temporarily hide Google Maps embedding from this page.'),
+        ];
+
+        if (!$this->HideMapField)
+        {
+            $mainFields = array_merge($mainFields, [
+              GoogleMapField::create($this, 'Location'),
+            ]);
+        }
+
+        $mainFields = array_merge($mainFields, [
+          $Latitude,
+          $Longitude,
+          $Zoom,
+        ]);
+
         $fields->addFieldsToTab(
-            'Root.Main',
-            [
-                TextField::create('Title', 'Title'),
-                GoogleMapField::create($this, 'Location'),
-                UploadField::create('Icon', 'Icon'),
-                DropdownField::create('InfoWindowTemplate', 'Info Window Template', $infoWindowTemplates)->setDescription('Info Window option in Settings needs  to be enabled for this to work.<br>Place your template in `/themes/{theme}/templates/Components/Maps/InfoWindows/you_template_name.ss`'),
-            ],
+            'Root.Main', $mainFields,
         );
 
         if ($this->ID)
