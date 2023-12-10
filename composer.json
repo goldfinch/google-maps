@@ -17,6 +17,7 @@
         "silverstripe/admin": "^2.0",
         "goldfinch/silverstripe-googlemapfield": "^2.2",
         "goldfinch/json-editor": "dev-master",
+        "goldfinch/helpers": "dev-master",
         "jonom/silverstripe-someconfig": "^1.0",
         "dnadesign/silverstripe-elemental": "^5.0",
         "silvershop/silverstripe-hasonefield": "dev-main"
