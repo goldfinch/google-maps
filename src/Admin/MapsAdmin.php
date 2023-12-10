@@ -16,7 +16,7 @@ class MapsAdmin extends ModelAdmin
 
     private static $url_segment = 'maps';
     private static $menu_title = 'Maps';
-    private static $menu_icon_class = 'bi-geo-alt-fill';
+    private static $menu_icon_class = 'font-icon-p-map';
     // private static $menu_priority = -0.5;
 
     private static $managed_models = [

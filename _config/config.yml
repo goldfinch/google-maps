@@ -5,3 +5,12 @@ Name: goldfinch-component-maps
 Goldfinch\Component\Maps\Admin\MapsAdmin:
   extensions:
     - Goldfinch\Helpers\Extensions\BlocksAdminExtension
+
+---
+Name: goldfinch-component-maps-icon
+Only:
+  moduleexists: 'goldfinch/enchantment'
+---
+
+Goldfinch\Component\Maps\Admin\MapsAdmin:
+  menu_icon_class: 'bi-geo-alt-fill'

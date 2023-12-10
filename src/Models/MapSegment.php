@@ -80,7 +80,9 @@ class MapSegment extends DataObject
 
     // * goldfinch/helpers
     // private static $field_descriptions = [];
-    // private static $required_fields = [];
+    private static $required_fields = [
+        'Type',
+    ];
 
     public function RenderSegmentMap()
     {
@@ -159,12 +161,19 @@ class MapSegment extends DataObject
 
     public function MapThumbnail()
     {
-        $data = json_decode($this->SegmentData());
+        if (ss_env('APP_GOOGLE_MAPS_KEY'))
+        {
+            $data = json_decode($this->SegmentData());
 
-        $url = google_maps_preview($data->Latitude, $data->Longitude, $data->Zoom, '260x140');
+            $url = google_maps_preview($data->Latitude, $data->Longitude, $data->Zoom, '260x140');
 
-        $html = DBHTMLText::create();
-        $html->setValue('<img src="' . $url . '" alt="Preview image"/>');
+            $html = DBHTMLText::create();
+            $html->setValue('<img src="' . $url . '" alt="Preview image"/>');
+        }
+        else
+        {
+            $html = '-';
+        }
 
         return $html;
     }
@@ -262,7 +271,7 @@ class MapSegment extends DataObject
                 DropdownField::create(
                     'Type',
                     'Type',
-                    $typesOptions,
+                    $typesOptions ?? [],
                 ),
                 GoogleMapField::create($this, 'Location'),
             ]
@@ -366,7 +375,7 @@ class MapSegment extends DataObject
 
     public function SegmentData()
     {
-        $parameters = json_decode($this->Parameters);
+        $parameters = json_decode($this->Parameters ?? '');
 
         $theme = '';
 
