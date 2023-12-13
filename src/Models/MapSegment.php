@@ -53,7 +53,7 @@ class MapSegment extends DataObject
 
     private static $many_many_extraFields = [
         'Markers' => [
-            'SortOrder' => 'Int',
+            'SortExtra' => 'Int',
         ]
     ];
 
