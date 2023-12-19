@@ -320,7 +320,7 @@ class MapSegment extends DataObject
                     'Markers',
                     'Markers',
                     $this->Markers(),
-                    $cfg = GridFieldManyManyConfig::create(),
+                    $cfg = GridFieldManyManyConfig::create(null, 'SortExtra'),
                   )
               ]
             );
