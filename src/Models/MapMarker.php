@@ -25,7 +25,6 @@ class MapMarker extends DataObject
         'Title' => 'Varchar',
         'Map' => 'Map',
         'InfoWindowTemplate' => 'Varchar',
-        'HideMapField' => 'Boolean',
 
         'Parameters' => DBJSONText::class,
     ];
@@ -110,7 +109,6 @@ class MapMarker extends DataObject
         $fields->removeByName([
             'SegmentID',
             'Parameters',
-            'HideMapField',
         ]);
 
         $infoWindowTemplates = [
@@ -142,15 +140,8 @@ class MapMarker extends DataObject
           TextField::create('Title', 'Title'),
           UploadField::create('Icon', 'Icon')->setFolderName('maps'),
           DropdownField::create('InfoWindowTemplate', 'Info Window Template', $infoWindowTemplates)->setDescription('Info Window option in Settings needs  to be enabled for this to work.<br>Place your template in `/themes/{theme}/templates/Components/Maps/InfoWindows/you_template_name.ss`'),
-          CheckboxField::create('HideMapField', 'Hide map iframe')->setDescription('Dev option: use it if you experience issues on this page due to embed Google Maps. This switch allows you to temporarily hide Google Maps embedding from this page.'),
+          MapField::create('Map'),
         ];
-
-        if (!$this->HideMapField)
-        {
-            $mainFields = array_merge($mainFields, [
-              GoogleMapField::create($this, 'Location'),
-            ]);
-        }
 
         $fields->addFieldsToTab(
             'Root.Main', $mainFields,

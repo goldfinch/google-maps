@@ -36,7 +36,6 @@ class MapSegment extends DataObject
         'Type' => 'Varchar',
         'Disabled' => 'Boolean',
         'Map' => 'Map',
-        'HideMapField' => 'Boolean',
 
         'Parameters' => DBJSONText::class,
     ];
@@ -230,7 +229,6 @@ class MapSegment extends DataObject
             'Type',
             'Disabled',
             'Parameters',
-            'HideMapField',
         ]);
 
         if ($this->getSegmentTypeConfig('markers'))
@@ -265,15 +263,8 @@ class MapSegment extends DataObject
               'Type',
               $typesOptions ?? [],
           ),
-          CheckboxField::create('HideMapField', 'Hide map iframe')->setDescription('Dev option: use it if you experience issues on this page due to embed Google Maps. This switch allows you to temporarily hide Google Maps embedding from this page.'),
+          MapField::create('Map'),
         ];
-
-        if (!$this->HideMapField)
-        {
-            $mainFields = array_merge($mainFields, [
-              MapField::create('Map'),
-            ]);
-        }
 
         $fields->addFieldsToTab(
             'Root.Main', $mainFields,
