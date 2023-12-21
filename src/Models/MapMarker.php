@@ -3,12 +3,12 @@
 namespace Goldfinch\Component\Maps\Models;
 
 use SilverStripe\Assets\File;
-use BetterBrief\GoogleMapField;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Security\Permission;
+use Goldfinch\GoogleFields\Forms\MapField;
 use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\AssetAdmin\Forms\UploadField;
 use Goldfinch\Component\Maps\Models\MapSegment;
@@ -23,9 +23,7 @@ class MapMarker extends DataObject
 
     private static $db = [
         'Title' => 'Varchar',
-        'Latitude' => 'Varchar',
-        'Longitude' => 'Varchar',
-        'Zoom' => 'Int',
+        'Map' => 'Map',
         'InfoWindowTemplate' => 'Varchar',
         'HideMapField' => 'Boolean',
 
@@ -95,7 +93,7 @@ class MapMarker extends DataObject
 
     public function MapThumbnail()
     {
-        $url = google_maps_preview($this->Latitude, $this->Longitude, $this->Zoom, '260x140');
+        $url = google_maps_preview($this->Map->Latitude, $this->Map->Longitude, $this->Map->Zoom, '260x140');
 
         $html = DBHTMLText::create();
         $html->setValue('<img src="' . $url . '" alt="Preview image"/>');
@@ -109,16 +107,9 @@ class MapMarker extends DataObject
 
         $fields = $fields->makeReadonly();
 
-        $Latitude = $fields->dataFieldByName('Latitude');
-        $Longitude = $fields->dataFieldByName('Longitude');
-        $Zoom = $fields->dataFieldByName('Zoom');
-
         $fields->removeByName([
             'SegmentID',
             'Parameters',
-            'Latitude',
-            'Longitude',
-            'Zoom',
             'HideMapField',
         ]);
 
@@ -160,12 +151,6 @@ class MapMarker extends DataObject
               GoogleMapField::create($this, 'Location'),
             ]);
         }
-
-        $mainFields = array_merge($mainFields, [
-          $Latitude,
-          $Longitude,
-          $Zoom,
-        ]);
 
         $fields->addFieldsToTab(
             'Root.Main', $mainFields,

@@ -2,13 +2,13 @@
 
 namespace Goldfinch\Component\Maps\Models;
 
-use BetterBrief\GoogleMapField;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Core\Environment;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Security\Permission;
+use Goldfinch\GoogleFields\Forms\MapField;
 use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\Forms\GridField\GridField;
 use Goldfinch\Component\Maps\Blocks\MapBlock;
@@ -35,9 +35,7 @@ class MapSegment extends DataObject
         'Title' => 'Varchar',
         'Type' => 'Varchar',
         'Disabled' => 'Boolean',
-        'Latitude' => 'Varchar',
-        'Longitude' => 'Varchar',
-        'Zoom' => 'Int',
+        'Map' => 'Map',
         'HideMapField' => 'Boolean',
 
         'Parameters' => DBJSONText::class,
@@ -227,18 +225,11 @@ class MapSegment extends DataObject
     {
         $fields = parent::getCMSFields();
 
-        $Latitude = $fields->dataFieldByName('Latitude');
-        $Longitude = $fields->dataFieldByName('Longitude');
-        $Zoom = $fields->dataFieldByName('Zoom');
-
         $fields->removeByName([
             'Title',
             'Type',
             'Disabled',
             'Parameters',
-            'Latitude',
-            'Longitude',
-            'Zoom',
             'HideMapField',
         ]);
 
@@ -280,15 +271,9 @@ class MapSegment extends DataObject
         if (!$this->HideMapField)
         {
             $mainFields = array_merge($mainFields, [
-              GoogleMapField::create($this, 'Location'),
+              MapField::create('Map'),
             ]);
         }
-
-        $mainFields = array_merge($mainFields, [
-          $Latitude,
-          $Longitude,
-          $Zoom,
-        ]);
 
         $fields->addFieldsToTab(
             'Root.Main', $mainFields,
@@ -381,8 +366,8 @@ class MapSegment extends DataObject
                 'Title' => $marker->Title,
                 'Icon' => $marker->Icon()->exists() ? $marker->Icon()->getURL() : null,
                 'InfoWindow' => $iw ? $iw->RAW() : null,
-                'Latitude' => (float) $marker->Latitude,
-                'Longitude' => (float) $marker->Longitude,
+                'Latitude' => (float) $marker->Map->Latitude,
+                'Longitude' => (float) $marker->Map->Longitude,
                 'Parameters' => $marker->Parameters,
             ];
         }
@@ -411,9 +396,9 @@ class MapSegment extends DataObject
 
         $data = [
             'Key' => Environment::getEnv('APP_GOOGLE_MAPS_KEY'),
-            'Latitude' => (float) $this->Latitude,
-            'Longitude' => (float) $this->Longitude,
-            'Zoom' => (float) $this->Zoom,
+            'Latitude' => (float) $this->Map->Latitude,
+            'Longitude' => (float) $this->Map->Longitude,
+            'Zoom' => (float) $this->Map->Zoom,
             'Markers' => $this->MarkersData(),
             'Theme' => $theme,
         ];
