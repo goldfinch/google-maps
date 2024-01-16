@@ -1,8 +1,8 @@
 <?php
 
-namespace Goldfinch\Component\Maps\Blocks;
+namespace Goldfinch\GoogleMaps\Blocks;
 
-use Goldfinch\Component\Maps\Models\MapSegment;
+use Goldfinch\GoogleMaps\Models\MapSegment;
 use DNADesign\Elemental\Models\BaseElement;
 use SilverShop\HasOneField\HasOneButtonField;
 

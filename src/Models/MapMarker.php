@@ -1,6 +1,6 @@
 <?php
 
-namespace Goldfinch\Component\Maps\Models;
+namespace Goldfinch\GoogleMaps\Models;
 
 use SilverStripe\Assets\File;
 use SilverStripe\ORM\DataObject;
@@ -11,7 +11,7 @@ use SilverStripe\Security\Permission;
 use Goldfinch\GoogleFields\Forms\MapField;
 use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\AssetAdmin\Forms\UploadField;
-use Goldfinch\Component\Maps\Models\MapSegment;
+use Goldfinch\GoogleMaps\Models\MapSegment;
 use Goldfinch\JSONEditor\Forms\JSONEditorField;
 use Goldfinch\JSONEditor\ORM\FieldType\DBJSONText;
 
@@ -149,7 +149,7 @@ class MapMarker extends DataObject
 
         if ($this->ID)
         {
-            $schemaParamsPath = BASE_PATH . '/vendor/goldfinch/component-maps/_schema/marker.json';
+            $schemaParamsPath = BASE_PATH . '/vendor/goldfinch/google-maps/_schema/marker.json';
 
             if (file_exists($schemaParamsPath))
             {

@@ -4,13 +4,13 @@ TODO
 
 1)
 
-app/_config/component-maps.yml
+app/_config/google-maps.yml
 ```
 ---
-Name: app-component-maps
+Name: app-google-maps
 ---
 
-Goldfinch\Component\Maps\Models\MapSegment:
+Goldfinch\GoogleMaps\Models\MapSegment:
   segment_types:
     office:
       label: 'Office map'
@@ -74,7 +74,7 @@ package.json
 
 app.js
 ```
-import GoogleMap from '..../vendor/goldfinch/component-maps/client/src/src/map-mod';
+import GoogleMap from '..../vendor/goldfinch/google-maps/client/src/src/map-mod';
 // import GoogleMap from '@goldfinch-maps/src/map-mod';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -86,18 +86,18 @@ document.addEventListener('DOMContentLoaded', () => {
 ```
 resolve: {
   alias: [
-    { find: '@goldfinch-maps', replacement: fileURLToPath(new URL('./vendor/goldfinch/component-maps/client/src', import.meta.url)) },
+    { find: '@goldfinch-maps', replacement: fileURLToPath(new URL('./vendor/goldfinch/google-maps/client/src', import.meta.url)) },
   ],
 },
 ```
 
 2) Option two (Silverstripe requirement)
 ```
-<% require javascript('goldfinch/component-maps:client/dist/map.js') %>
+<% require javascript('goldfinch/google-maps:client/dist/map.js') %>
 ```
 or
 ```
-Requirements::javascript('goldfinch/component-maps:client/dist/map.js');
+Requirements::javascript('goldfinch/google-maps:client/dist/map.js');
 ```
 
 ---

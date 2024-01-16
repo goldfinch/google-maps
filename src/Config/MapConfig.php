@@ -1,6 +1,6 @@
 <?php
 
-namespace Goldfinch\Component\Maps\Configs;
+namespace Goldfinch\GoogleMaps\Configs;
 
 use JonoM\SomeConfig\SomeConfig;
 use SilverStripe\ORM\DataObject;

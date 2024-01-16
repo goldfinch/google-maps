@@ -1,5 +1,5 @@
 {
-    "name": "goldfinch/component-maps",
+    "name": "goldfinch/google-maps",
     "description": "",
     "type": "silverstripe-vendormodule",
     "keywords": [
@@ -30,7 +30,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Goldfinch\\Component\\Maps\\": "src/"
+            "Goldfinch\\GoogleMaps\\": "src/"
         }
     },
     "minimum-stability": "dev",

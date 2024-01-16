@@ -1,19 +1,19 @@
 ---
-Name: goldfinch-component-maps
+Name: goldfinch-google-maps
 ---
 
-Goldfinch\Component\Maps\Admin\MapsAdmin:
+Goldfinch\GoogleMaps\Admin\MapsAdmin:
   extensions:
     - Goldfinch\Helpers\Extensions\BlocksAdminExtension
 
 ---
-Name: goldfinch-component-maps-icon
+Name: goldfinch-google-maps-icon
 Only:
   moduleexists: 'goldfinch/enchantment'
 ---
 
-Goldfinch\Component\Maps\Admin\MapsAdmin:
+Goldfinch\GoogleMaps\Admin\MapsAdmin:
   menu_icon_class: 'bi-geo-alt-fill'
 
-Goldfinch\Component\Maps\Blocks\MapBlock:
+Goldfinch\GoogleMaps\Blocks\MapBlock:
   icon: 'bi-geo-alt-fill'

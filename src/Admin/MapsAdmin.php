@@ -1,13 +1,13 @@
 <?php
 
-namespace Goldfinch\Component\Maps\Admin;
+namespace Goldfinch\GoogleMaps\Admin;
 
 use SilverStripe\Admin\ModelAdmin;
 use JonoM\SomeConfig\SomeConfigAdmin;
-use Goldfinch\Component\Maps\Blocks\MapBlock;
-use Goldfinch\Component\Maps\Models\MapMarker;
-use Goldfinch\Component\Maps\Configs\MapConfig;
-use Goldfinch\Component\Maps\Models\MapSegment;
+use Goldfinch\GoogleMaps\Blocks\MapBlock;
+use Goldfinch\GoogleMaps\Models\MapMarker;
+use Goldfinch\GoogleMaps\Configs\MapConfig;
+use Goldfinch\GoogleMaps\Models\MapSegment;
 use SilverStripe\Forms\GridField\GridFieldConfig;
 
 class MapsAdmin extends ModelAdmin

@@ -1,6 +1,6 @@
 <?php
 
-namespace Goldfinch\Component\Maps\Models;
+namespace Goldfinch\GoogleMaps\Models;
 
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms\TextField;
@@ -11,8 +11,8 @@ use SilverStripe\Security\Permission;
 use Goldfinch\GoogleFields\Forms\MapField;
 use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\Forms\GridField\GridField;
-use Goldfinch\Component\Maps\Blocks\MapBlock;
-use Goldfinch\Component\Maps\Models\MapMarker;
+use Goldfinch\GoogleMaps\Blocks\MapBlock;
+use Goldfinch\GoogleMaps\Models\MapMarker;
 use Goldfinch\JSONEditor\Forms\JSONEditorField;
 use Goldfinch\JSONEditor\ORM\FieldType\DBJSONText;
 use SilverStripe\Forms\GridField\GridFieldDataColumns;
@@ -272,7 +272,7 @@ class MapSegment extends DataObject
 
         if ($this->ID && $this->Type)
         {
-            $schemaParamsPath = BASE_PATH . '/vendor/goldfinch/component-maps/_schema/' . 'map.json';
+            $schemaParamsPath = BASE_PATH . '/vendor/goldfinch/google-maps/_schema/' . 'map.json';
 
             if (file_exists($schemaParamsPath))
             {
@@ -376,7 +376,7 @@ class MapSegment extends DataObject
         {
             if ($parameters->map_theme->theme && $parameters->map_theme->theme != 'custom')
             {
-                $theme = BASE_PATH . '/vendor/goldfinch/component-maps/_schema/map-styles/' . $parameters->map_theme->theme . '.json';
+                $theme = BASE_PATH . '/vendor/goldfinch/google-maps/_schema/map-styles/' . $parameters->map_theme->theme . '.json';
 
                 if (file_exists($theme))
                 {
