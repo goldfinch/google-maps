@@ -1,8 +1,6 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import autoprefixer from 'autoprefixer';
-import { viteStaticCopy } from 'vite-plugin-static-copy';
-import initCfg from './app.config.js';
 
 export default defineConfig(({ command, mode, ssrBuild }) => ({
   resolve: {
