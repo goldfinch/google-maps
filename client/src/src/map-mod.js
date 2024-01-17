@@ -1,17 +1,13 @@
-import { Loader } from "@googlemaps/js-api-loader"
+import { Loader } from '@googlemaps/js-api-loader';
 
 class GoogleMap {
-
   constructor() {
-
     document.querySelectorAll('[data-map-segment]').forEach((e, i) => {
-      this.initSegment(e)
-    })
-
+      this.initSegment(e);
+    });
   }
 
   initSegment(mapElement) {
-
     const segmentAttr = mapElement.getAttribute('data-segment');
     const parametersAttr = mapElement.getAttribute('data-parameters');
 
@@ -21,10 +17,10 @@ class GoogleMap {
 
     const segment = JSON.parse(segmentAttr);
 
-    var mapSettings = {
+    let mapSettings = {
       center: { lat: segment.Latitude, lng: segment.Longitude },
       zoom: segment.Zoom,
-      backgroundColor: "#fff",
+      backgroundColor: '#fff',
 
       // fullscreenControlOptions
       // mapId
@@ -49,166 +45,152 @@ class GoogleMap {
       // mapTypeId: "roadmap",
       // mapTypeId: "satellite",
       // mapTypeId: "terrain",
-    }
+    };
 
     if (parametersAttr) {
-      var parameters = JSON.parse(parametersAttr)
+      var parameters = JSON.parse(parametersAttr);
     }
 
     if (typeof parameters !== 'undefined') {
+      const mapTheme = parameters.map_theme;
+      var mapDynamic = parameters.map_dynamic;
 
-        var mapTheme = parameters.map_theme
-        var mapDynamic = parameters.map_dynamic
+      var mapOverview = parameters.map_inset_overview;
 
-        var mapOverview = parameters.map_inset_overview
+      // pseudo parameters
+      delete parameters.map_theme;
+      delete parameters.map_dynamic;
+      delete parameters.map_height;
+      delete parameters.map_inset_overview;
 
-        // pseudo parameters
-        delete parameters.map_theme
-        delete parameters.map_dynamic
-        delete parameters.map_height
-        delete parameters.map_inset_overview
-
-        if (parameters.mapTypeId === '-') {
-          delete parameters.mapTypeId
-        }
-
-        if (parameters.scrollwheel !== '') {
-          parameters.scrollwheel = JSON.parse(parameters.scrollwheel)
-        }
-
-        if (mapTheme.theme == 'custom' && mapTheme.styles) {
-          parameters.styles = JSON.parse(mapTheme.styles)
-        } else if (segment.Theme) {
-          parameters.styles = JSON.parse(segment.Theme)
-        }
-
-        // cleaner
-        Object.keys(parameters).forEach(function(key, index) {
-          if (parameters[key] === '') {
-            delete parameters[key]
-          }
-        });
-
-        // delete parameters.clickableIcons
-        // delete parameters.disableDefaultUI
-        // delete parameters.keyboardShortcuts
-        // delete parameters.mapTypeControl
-        // delete parameters.noClear
-        // delete parameters.streetViewControl
-        // delete parameters.scrollwheel
-        // delete parameters.scaleControl
-        // delete parameters.isFractionalZoomEnabled
-        // delete parameters.mapTypeId
-        // delete parameters.zoomControl
-        // delete parameters.rotateControl
-        // delete parameters.gestureHandling
-        // delete parameters.fullscreenControl
-
-        mapSettings = {
-          ...mapSettings,
-          ...parameters
-        }
+      if (parameters.mapTypeId === '-') {
+        delete parameters.mapTypeId;
       }
 
-      const loader = new Loader({
-        apiKey: segment.Key,
-        version: 'weekly',
+      if (parameters.scrollwheel !== '') {
+        parameters.scrollwheel = JSON.parse(parameters.scrollwheel);
+      }
+
+      if (mapTheme.theme == 'custom' && mapTheme.styles) {
+        parameters.styles = JSON.parse(mapTheme.styles);
+      } else if (segment.Theme) {
+        parameters.styles = JSON.parse(segment.Theme);
+      }
+
+      // cleaner
+      Object.keys(parameters).forEach((key, index) => {
+        if (parameters[key] === '') {
+          delete parameters[key];
+        }
       });
 
-      if (mapDynamic.enabled) {
+      // delete parameters.clickableIcons
+      // delete parameters.disableDefaultUI
+      // delete parameters.keyboardShortcuts
+      // delete parameters.mapTypeControl
+      // delete parameters.noClear
+      // delete parameters.streetViewControl
+      // delete parameters.scrollwheel
+      // delete parameters.scaleControl
+      // delete parameters.isFractionalZoomEnabled
+      // delete parameters.mapTypeId
+      // delete parameters.zoomControl
+      // delete parameters.rotateControl
+      // delete parameters.gestureHandling
+      // delete parameters.fullscreenControl
 
-        const wrapper = document.getElementById("wrapper");
+      mapSettings = {
+        ...mapSettings,
+        ...parameters,
+      };
+    }
 
-        if (mapDynamic.preview) {
-          const url = "https://maps.googleapis.com/maps/api/staticmap";
-          wrapper.style.backgroundImage = `url(${url}?center=${mapSettings.center.lat},${mapSettings.center.lng}&zoom=${mapSettings.zoom}&scale=2&size=${wrapper.clientWidth}x${wrapper.clientHeight}&key=${segment.Key})`;
-        }
+    const loader = new Loader({
+      apiKey: segment.Key,
+      version: 'weekly',
+    });
 
-        wrapper.addEventListener("click", () => {
-          wrapper.remove();
-          loader.load().then(() => {
-            var map = new google.maps.Map(mapElement, mapSettings);
-            this.mapOverviewInit(map, mapOverview, mapElement, mapSettings)
-            this.markerHandler(map, segment, parameters, null)
+    if (mapDynamic.enabled) {
+      const wrapper = document.getElementById('wrapper');
 
-            // callback
-            if (window.goldfinch && window.goldfinch.map_callback) {
-              window.goldfinch.map_callback(map, mapSettings, segment, parameters);
-            }
-          });
+      if (mapDynamic.preview) {
+        const url = 'https://maps.googleapis.com/maps/api/staticmap';
+        wrapper.style.backgroundImage = `url(${url}?center=${mapSettings.center.lat},${mapSettings.center.lng}&zoom=${mapSettings.zoom}&scale=2&size=${wrapper.clientWidth}x${wrapper.clientHeight}&key=${segment.Key})`;
+      }
+
+      wrapper.addEventListener('click', () => {
+        wrapper.remove();
+        loader.load().then(() => {
+          const map = new google.maps.Map(mapElement, mapSettings);
+          this.mapOverviewInit(map, mapOverview, mapElement, mapSettings);
+          this.markerHandler(map, segment, parameters, null);
+
+          // callback
+          if (window.goldfinch && window.goldfinch.map_callback) {
+            window.goldfinch.map_callback(map, mapSettings, segment, parameters);
+          }
         });
-      } else {
+      });
+    } else {
       loader.load().then(async () => {
-
-        var loadAdvancedMarker = false;
+        let loadAdvancedMarker = false;
 
         if (segment.Markers.length) {
-
           segment.Markers.forEach((e, i) => {
-
             if (e.Parameters) {
-              e.Parameters = JSON.parse(e.Parameters)
+              e.Parameters = JSON.parse(e.Parameters);
 
               if (e.Parameters && e.Parameters.marker_type.markerType == 'AdvancedMarker' && !loadAdvancedMarker) {
                 loadAdvancedMarker = true;
               }
             }
-
           });
         }
 
-        const { Map } = await google.maps.importLibrary("maps");
+        const { Map } = await google.maps.importLibrary('maps');
 
         if (parameters.mapId && loadAdvancedMarker) {
-          var { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+          var { AdvancedMarkerElement } = await google.maps.importLibrary('marker');
         } else {
-          var AdvancedMarkerElement = null
+          var AdvancedMarkerElement = null;
         }
 
-        var map = new Map(mapElement, mapSettings);
+        const map = new Map(mapElement, mapSettings);
 
-        this.mapOverviewInit(map, mapOverview, mapElement, mapSettings)
-        this.markerHandler(map, segment, parameters, AdvancedMarkerElement)
+        this.mapOverviewInit(map, mapOverview, mapElement, mapSettings);
+        this.markerHandler(map, segment, parameters, AdvancedMarkerElement);
 
         // callback
         if (window.goldfinch && window.goldfinch.map_callback) {
           window.goldfinch.map_callback(map, mapSettings, segment, parameters);
         }
-
       });
     }
   }
 
   markerHandler(map, segment, parameters, AdvancedMarkerElement) {
-
     if (segment.Markers.length) {
-
       segment.Markers.forEach((e, i) => {
-
-        var marker;
+        let marker;
 
         if (e.Parameters) {
+          const markerPosition = { lat: e.Latitude, lng: e.Longitude };
 
-          let markerPosition = { lat: e.Latitude, lng: e.Longitude };
-
-          var markerParams = {
+          const markerParams = {
             position: markerPosition,
             map,
             title: e.Title,
           };
 
           if (typeof e.Parameters !== 'object') {
-
-            e.Parameters = JSON.parse(e.Parameters)
+            e.Parameters = JSON.parse(e.Parameters);
           }
 
           if (e.Parameters.marker_type.markerType == 'AdvancedMarker' && AdvancedMarkerElement) {
-
             // AdvancedMarker
             // console.log('AdvancedMarker')
 
             if (e.Parameters.marker_type.markerCustomHTML && e.InfoWindow) {
-
               const customContent = document.createElement('div');
               customContent.classList.add('custom-map-marker-wrapper');
               customContent.innerHTML = e.InfoWindow;
@@ -224,23 +206,20 @@ class GoogleMap {
             if (window.goldfinch && window.goldfinch.marker_callback) {
               window.goldfinch.marker_callback(marker, markerParams, e, map, segment, parameters);
             }
-
           } else {
-
             // console.log('Marker')
 
             // Marker
 
             if (
-              e.Parameters.marker_type.markerFont &&
-              e.Parameters.marker_type.markerFontFamily &&
-              e.Parameters.marker_type.markerFontCode
+              e.Parameters.marker_type.markerFont
+              && e.Parameters.marker_type.markerFontFamily
+              && e.Parameters.marker_type.markerFontCode
             ) {
-
               markerParams.icon = ' ';
               markerParams.label = {
                 fontFamily: e.Parameters.marker_type.markerFontFamily,
-                text: decodeURIComponent(JSON.parse('"' + e.Parameters.marker_type.markerFontCode.replace(/\"/g, '\\"') + '"')),
+                text: decodeURIComponent(JSON.parse(`"${e.Parameters.marker_type.markerFontCode.replace(/\"/g, '\\"')}"`)),
               };
 
               if (e.Parameters.marker_type.markerFontColor) {
@@ -250,10 +229,8 @@ class GoogleMap {
               if (e.Parameters.marker_type.markerFontSize) {
                 markerParams.label.fontSize = e.Parameters.marker_type.markerFontSize;
               }
-
             } else if (e.Icon) {
-
-              let iconSet = {
+              const iconSet = {
                 url: e.Icon,
                 // This marker is 150 pixels wide by 150 pixels high.
                 // size: new google.maps.Size(150, 150),
@@ -263,12 +240,12 @@ class GoogleMap {
               };
 
               if (e.Parameters.marker_type.markerScaleWidth || e.Parameters.marker_type.markerScaleHeight) {
-                iconSet.scaledSize = new google.maps.Size(e.Parameters.marker_type.markerScaleWidth, e.Parameters.marker_type.markerScaleHeight)
+                iconSet.scaledSize = new google.maps.Size(e.Parameters.marker_type.markerScaleWidth, e.Parameters.marker_type.markerScaleHeight);
               }
 
               // The anchor for this image is the base of the flagpole at (0, 150).
               if (e.Parameters.marker_type.markerAnchorX || e.Parameters.marker_type.markerAnchorY) {
-                iconSet.anchor = new google.maps.Point(e.Parameters.marker_type.markerAnchorX, e.Parameters.marker_type.markerAnchorY)
+                iconSet.anchor = new google.maps.Point(e.Parameters.marker_type.markerAnchorX, e.Parameters.marker_type.markerAnchorY);
               }
 
               markerParams.icon = iconSet;
@@ -292,11 +269,10 @@ class GoogleMap {
           // info window
 
           if (e.Parameters && e.Parameters.info_window.infoWindow && e.InfoWindow) {
-
-            var infowindowParams ={
+            const infowindowParams = {
               content: e.InfoWindow,
               ariaLabel: e.Title,
-            }
+            };
 
             if (e.Parameters.info_window.infoWindowMaxWidth) {
               infowindowParams.maxWidth = e.Parameters.info_window.infoWindowMaxWidth;
@@ -306,9 +282,9 @@ class GoogleMap {
               infowindowParams.minWidth = e.Parameters.info_window.infoWindowMinWidth;
             }
 
-            var infowindow = new google.maps.InfoWindow(infowindowParams);
+            const infowindow = new google.maps.InfoWindow(infowindowParams);
 
-            marker.addListener("click", () => {
+            marker.addListener('click', () => {
               infowindow.open({
                 anchor: marker,
                 map,
@@ -320,32 +296,26 @@ class GoogleMap {
               window.goldfinch.infoWindow_callback(infowindow, infowindowParams, marker, map, e, segment, parameters);
             }
           }
-
         }
-
-      })
+      });
     }
-
   }
 
   mapOverviewInit(map, mapOverview, mapElement, mapSettings) {
-
-
     if (mapOverview) {
-
       const OVERVIEW_DIFFERENCE = 5;
       const OVERVIEW_MIN_ZOOM = 3;
       const OVERVIEW_MAX_ZOOM = 10;
 
       let overviewEl = mapElement.getAttribute('data-map-segment');
-      overviewEl = document.querySelector('[data-map-overview="' + overviewEl + '"]');
+      overviewEl = document.querySelector(`[data-map-overview="${overviewEl}"]`);
 
       // here in case dynamic load is enabled
-      overviewEl.style.display = 'block'
+      overviewEl.style.display = 'block';
 
-      var overview = new google.maps.Map(overviewEl, {
+      const overview = new google.maps.Map(overviewEl, {
         ...mapSettings,
-        gestureHandling: "none",
+        gestureHandling: 'none',
         fullscreenControl: false,
         mapTypeControl: false,
         rotateControl: false,
@@ -358,7 +328,7 @@ class GoogleMap {
         return Math.min(Math.max(num, min), max);
       }
 
-      map.addListener("bounds_changed", () => {
+      map.addListener('bounds_changed', () => {
         overview.setCenter(map.getCenter());
         overview.setZoom(
           clamp(
@@ -369,9 +339,7 @@ class GoogleMap {
         );
       });
     }
-
   }
-
 }
 
 export default GoogleMap;
