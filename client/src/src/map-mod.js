@@ -127,7 +127,12 @@ class GoogleMap {
 
           // callback
           if (window.goldfinch && window.goldfinch.map_callback) {
-            window.goldfinch.map_callback(map, mapSettings, segment, parameters);
+            window.goldfinch.map_callback(
+              map,
+              mapSettings,
+              segment,
+              parameters,
+            );
           }
         });
       });
@@ -140,7 +145,11 @@ class GoogleMap {
             if (e.Parameters) {
               e.Parameters = JSON.parse(e.Parameters);
 
-              if (e.Parameters && e.Parameters.marker_type.markerType == 'AdvancedMarker' && !loadAdvancedMarker) {
+              if (
+                e.Parameters &&
+                e.Parameters.marker_type.markerType == 'AdvancedMarker' &&
+                !loadAdvancedMarker
+              ) {
                 loadAdvancedMarker = true;
               }
             }
@@ -150,7 +159,8 @@ class GoogleMap {
         const { Map } = await google.maps.importLibrary('maps');
 
         if (parameters.mapId && loadAdvancedMarker) {
-          var { AdvancedMarkerElement } = await google.maps.importLibrary('marker');
+          var { AdvancedMarkerElement } =
+            await google.maps.importLibrary('marker');
         } else {
           var AdvancedMarkerElement = null;
         }
@@ -186,7 +196,10 @@ class GoogleMap {
             e.Parameters = JSON.parse(e.Parameters);
           }
 
-          if (e.Parameters.marker_type.markerType == 'AdvancedMarker' && AdvancedMarkerElement) {
+          if (
+            e.Parameters.marker_type.markerType == 'AdvancedMarker' &&
+            AdvancedMarkerElement
+          ) {
             // AdvancedMarker
             // console.log('AdvancedMarker')
 
@@ -204,7 +217,14 @@ class GoogleMap {
 
             // callback
             if (window.goldfinch && window.goldfinch.marker_callback) {
-              window.goldfinch.marker_callback(marker, markerParams, e, map, segment, parameters);
+              window.goldfinch.marker_callback(
+                marker,
+                markerParams,
+                e,
+                map,
+                segment,
+                parameters,
+              );
             }
           } else {
             // console.log('Marker')
@@ -212,22 +232,31 @@ class GoogleMap {
             // Marker
 
             if (
-              e.Parameters.marker_type.markerFont
-              && e.Parameters.marker_type.markerFontFamily
-              && e.Parameters.marker_type.markerFontCode
+              e.Parameters.marker_type.markerFont &&
+              e.Parameters.marker_type.markerFontFamily &&
+              e.Parameters.marker_type.markerFontCode
             ) {
               markerParams.icon = ' ';
               markerParams.label = {
                 fontFamily: e.Parameters.marker_type.markerFontFamily,
-                text: decodeURIComponent(JSON.parse(`"${e.Parameters.marker_type.markerFontCode.replace(/\"/g, '\\"')}"`)),
+                text: decodeURIComponent(
+                  JSON.parse(
+                    `"${e.Parameters.marker_type.markerFontCode.replace(
+                      /\"/g,
+                      '\\"',
+                    )}"`,
+                  ),
+                ),
               };
 
               if (e.Parameters.marker_type.markerFontColor) {
-                markerParams.label.color = e.Parameters.marker_type.markerFontColor;
+                markerParams.label.color =
+                  e.Parameters.marker_type.markerFontColor;
               }
 
               if (e.Parameters.marker_type.markerFontSize) {
-                markerParams.label.fontSize = e.Parameters.marker_type.markerFontSize;
+                markerParams.label.fontSize =
+                  e.Parameters.marker_type.markerFontSize;
               }
             } else if (e.Icon) {
               const iconSet = {
@@ -239,13 +268,25 @@ class GoogleMap {
                 // optimized: true
               };
 
-              if (e.Parameters.marker_type.markerScaleWidth || e.Parameters.marker_type.markerScaleHeight) {
-                iconSet.scaledSize = new google.maps.Size(e.Parameters.marker_type.markerScaleWidth, e.Parameters.marker_type.markerScaleHeight);
+              if (
+                e.Parameters.marker_type.markerScaleWidth ||
+                e.Parameters.marker_type.markerScaleHeight
+              ) {
+                iconSet.scaledSize = new google.maps.Size(
+                  e.Parameters.marker_type.markerScaleWidth,
+                  e.Parameters.marker_type.markerScaleHeight,
+                );
               }
 
               // The anchor for this image is the base of the flagpole at (0, 150).
-              if (e.Parameters.marker_type.markerAnchorX || e.Parameters.marker_type.markerAnchorY) {
-                iconSet.anchor = new google.maps.Point(e.Parameters.marker_type.markerAnchorX, e.Parameters.marker_type.markerAnchorY);
+              if (
+                e.Parameters.marker_type.markerAnchorX ||
+                e.Parameters.marker_type.markerAnchorY
+              ) {
+                iconSet.anchor = new google.maps.Point(
+                  e.Parameters.marker_type.markerAnchorX,
+                  e.Parameters.marker_type.markerAnchorY,
+                );
               }
 
               markerParams.icon = iconSet;
@@ -254,7 +295,8 @@ class GoogleMap {
 
             // animation
             if (e.Parameters && e.Parameters.marker_type.markerAnimation) {
-              markerParams.animation = google.maps.Animation[e.Parameters.marker_type.markerAnimation];
+              markerParams.animation =
+                google.maps.Animation[e.Parameters.marker_type.markerAnimation];
             }
 
             // init marker
@@ -262,24 +304,37 @@ class GoogleMap {
 
             // callback
             if (window.goldfinch && window.goldfinch.marker_callback) {
-              window.goldfinch.marker_callback(marker, markerParams, e, map, segment, parameters);
+              window.goldfinch.marker_callback(
+                marker,
+                markerParams,
+                e,
+                map,
+                segment,
+                parameters,
+              );
             }
           }
 
           // info window
 
-          if (e.Parameters && e.Parameters.info_window.infoWindow && e.InfoWindow) {
+          if (
+            e.Parameters &&
+            e.Parameters.info_window.infoWindow &&
+            e.InfoWindow
+          ) {
             const infowindowParams = {
               content: e.InfoWindow,
               ariaLabel: e.Title,
             };
 
             if (e.Parameters.info_window.infoWindowMaxWidth) {
-              infowindowParams.maxWidth = e.Parameters.info_window.infoWindowMaxWidth;
+              infowindowParams.maxWidth =
+                e.Parameters.info_window.infoWindowMaxWidth;
             }
 
             if (e.Parameters.info_window.infoWindowMinWidth) {
-              infowindowParams.minWidth = e.Parameters.info_window.infoWindowMinWidth;
+              infowindowParams.minWidth =
+                e.Parameters.info_window.infoWindowMinWidth;
             }
 
             const infowindow = new google.maps.InfoWindow(infowindowParams);
@@ -293,7 +348,15 @@ class GoogleMap {
 
             // callback
             if (window.goldfinch && window.goldfinch.infoWindow_callback) {
-              window.goldfinch.infoWindow_callback(infowindow, infowindowParams, marker, map, e, segment, parameters);
+              window.goldfinch.infoWindow_callback(
+                infowindow,
+                infowindowParams,
+                marker,
+                map,
+                e,
+                segment,
+                parameters,
+              );
             }
           }
         }
@@ -308,7 +371,9 @@ class GoogleMap {
       const OVERVIEW_MAX_ZOOM = 10;
 
       let overviewEl = mapElement.getAttribute('data-map-segment');
-      overviewEl = document.querySelector(`[data-map-overview="${overviewEl}"]`);
+      overviewEl = document.querySelector(
+        `[data-map-overview="${overviewEl}"]`,
+      );
 
       // here in case dynamic load is enabled
       overviewEl.style.display = 'block';

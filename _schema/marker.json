@@ -1,375 +1,361 @@
 {
-  "type": "object",
-  "options": {},
-  "properties": {
-
-    "marker_type": {
-      "type": "object",
-      "options": {
-        "containerAttributes": {
-          "class": "as-none-object"
-        }
-      },
-      "properties": {
-        "markerType": {
-          "type": "string",
-          "format": "select",
-          "default": "",
-          "description": "* Advanced Marker requiers Map ID set up in the map settings",
-          "options": {
-            "enum_titles": [
-              "Marker",
-              "Advanced Marker"
-            ]
-          },
-          "enum": ["Marker","AdvancedMarker"]
-        },
-        "markerScaleWidth": {
-          "title": "Marker width (scale)",
-          "type": "string",
-          "format": "numeric",
-          "options": {
-            "dependencies": {
-              "markerType": "Marker"
-            }
-          }
-        },
-        "markerScaleHeight": {
-          "title": "Marker height (scale)",
-          "type": "string",
-          "format": "numeric",
-          "options": {
-            "dependencies": {
-              "markerType": "Marker"
-            }
-          }
-        },
-        "markerAnchorX": {
-          "title": "Marker anchor (X)",
-          "type": "string",
-          "format": "numeric",
-          "options": {
-            "dependencies": {
-              "markerType": "Marker"
-            }
-          }
-        },
-        "markerAnchorY": {
-          "title": "Marker anchor (Y)",
-          "type": "string",
-          "format": "numeric",
-          "options": {
-            "dependencies": {
-              "markerType": "Marker"
-            }
-          }
-        },
-        "markerAnimation": {
-          "type": "string",
-          "format": "select",
-          "default": "",
-          "options": {
-            "dependencies": {
-              "markerType": "Marker"
+    "type": "object",
+    "options": {},
+    "properties": {
+        "marker_type": {
+            "type": "object",
+            "options": {
+                "containerAttributes": {
+                    "class": "as-none-object"
+                }
             },
-            "enum_titles": [
-              "-",
-              "Bounce",
-              "Drop"
-            ]
-          },
-          "enum": ["", "BOUNCE","DROP"]
-        },
-        "markerFont": {
-          "title": "Marker as Font Icon",
-          "type": "boolean",
-          "format": "checkbox",
-          "default": false,
-          "options": {
-            "dependencies": {
-              "markerType": "Marker"
-            }
-          }
-        },
-        "markerFontFamily": {
-          "title": "Font icon family name",
-          "type": "string",
-          "description": "eg: bootstrap-icons",
-          "options": {
-            "dependencies": {
-              "markerType": "Marker"
-            }
-          }
-        },
-        "markerFontCode": {
-          "title": "Font icon code point",
-          "type": "string",
-          "description": "eg: \\uF3E9",
-          "options": {
-            "dependencies": {
-              "markerType": "Marker"
-            }
-          }
-        },
-        "markerFontColor": {
-          "title": "Font icon color",
-          "type": "string",
-          "description": "eg: #109255",
-          "options": {
-            "dependencies": {
-              "markerType": "Marker"
-            }
-          }
-        },
-        "markerFontSize": {
-          "title": "Icon size",
-          "type": "string",
-          "description": "eg: 40px",
-          "options": {
-            "dependencies": {
-              "markerType": "Marker"
-            }
-          }
-        },
+            "properties": {
+                "markerType": {
+                    "type": "string",
+                    "format": "select",
+                    "default": "",
+                    "description": "* Advanced Marker requiers Map ID set up in the map settings",
+                    "options": {
+                        "enum_titles": ["Marker", "Advanced Marker"]
+                    },
+                    "enum": ["Marker", "AdvancedMarker"]
+                },
+                "markerScaleWidth": {
+                    "title": "Marker width (scale)",
+                    "type": "string",
+                    "format": "numeric",
+                    "options": {
+                        "dependencies": {
+                            "markerType": "Marker"
+                        }
+                    }
+                },
+                "markerScaleHeight": {
+                    "title": "Marker height (scale)",
+                    "type": "string",
+                    "format": "numeric",
+                    "options": {
+                        "dependencies": {
+                            "markerType": "Marker"
+                        }
+                    }
+                },
+                "markerAnchorX": {
+                    "title": "Marker anchor (X)",
+                    "type": "string",
+                    "format": "numeric",
+                    "options": {
+                        "dependencies": {
+                            "markerType": "Marker"
+                        }
+                    }
+                },
+                "markerAnchorY": {
+                    "title": "Marker anchor (Y)",
+                    "type": "string",
+                    "format": "numeric",
+                    "options": {
+                        "dependencies": {
+                            "markerType": "Marker"
+                        }
+                    }
+                },
+                "markerAnimation": {
+                    "type": "string",
+                    "format": "select",
+                    "default": "",
+                    "options": {
+                        "dependencies": {
+                            "markerType": "Marker"
+                        },
+                        "enum_titles": ["-", "Bounce", "Drop"]
+                    },
+                    "enum": ["", "BOUNCE", "DROP"]
+                },
+                "markerFont": {
+                    "title": "Marker as Font Icon",
+                    "type": "boolean",
+                    "format": "checkbox",
+                    "default": false,
+                    "options": {
+                        "dependencies": {
+                            "markerType": "Marker"
+                        }
+                    }
+                },
+                "markerFontFamily": {
+                    "title": "Font icon family name",
+                    "type": "string",
+                    "description": "eg: bootstrap-icons",
+                    "options": {
+                        "dependencies": {
+                            "markerType": "Marker"
+                        }
+                    }
+                },
+                "markerFontCode": {
+                    "title": "Font icon code point",
+                    "type": "string",
+                    "description": "eg: \\uF3E9",
+                    "options": {
+                        "dependencies": {
+                            "markerType": "Marker"
+                        }
+                    }
+                },
+                "markerFontColor": {
+                    "title": "Font icon color",
+                    "type": "string",
+                    "description": "eg: #109255",
+                    "options": {
+                        "dependencies": {
+                            "markerType": "Marker"
+                        }
+                    }
+                },
+                "markerFontSize": {
+                    "title": "Icon size",
+                    "type": "string",
+                    "description": "eg: 40px",
+                    "options": {
+                        "dependencies": {
+                            "markerType": "Marker"
+                        }
+                    }
+                },
 
-        "markerCustomHTML": {
-          "title": "Custom Marker (HTML & CSS)",
-          "type": "boolean",
-          "format": "checkbox",
-          "description": "required advanced marker",
-          "default": false,
-          "options": {
-            "dependencies": {
-              "markerType": "AdvancedMarker"
-            }
-          }
-        },
-        "draggable": {
-          "title": "Makes marker draggable",
-          "type": "boolean",
-          "format": "checkbox",
-          "description": "required advanced marker",
-          "default": false,
-          "options": {
-            "dependencies": {
-              "markerType": "AdvancedMarker"
-            }
-          }
-        }
-      },
-      "if": {
-        "properties": {
-          "markerType": {
-            "const": "Marker"
-          }
-        }
-      },
-      "then": {
-        "properties": {
-
-          "markerScaleWidth": {
-            "title": "Marker width (scale)",
-            "type": "string",
-            "format": "numeric",
-            "options": {
-              "dependencies": {
-                "markerType": "Marker"
-              }
-            }
-          },
-          "markerScaleHeight": {
-            "title": "Marker height (scale)",
-            "type": "string",
-            "format": "numeric",
-            "options": {
-              "dependencies": {
-                "markerType": "Marker"
-              }
-            }
-          },
-          "markerAnchorX": {
-            "title": "Marker anchor (X)",
-            "type": "string",
-            "format": "numeric",
-            "options": {
-              "dependencies": {
-                "markerType": "Marker"
-              }
-            }
-          },
-          "markerAnchorY": {
-            "title": "Marker anchor (Y)",
-            "type": "string",
-            "format": "numeric",
-            "options": {
-              "dependencies": {
-                "markerType": "Marker"
-              }
-            }
-          },
-          "markerAnimation": {
-            "type": "string",
-            "format": "select",
-            "default": "",
-            "options": {
-              "dependencies": {
-                "markerType": "Marker"
-              },
-              "enum_titles": [
-                "-",
-                "Bounce",
-                "Drop"
-              ]
+                "markerCustomHTML": {
+                    "title": "Custom Marker (HTML & CSS)",
+                    "type": "boolean",
+                    "format": "checkbox",
+                    "description": "required advanced marker",
+                    "default": false,
+                    "options": {
+                        "dependencies": {
+                            "markerType": "AdvancedMarker"
+                        }
+                    }
+                },
+                "draggable": {
+                    "title": "Makes marker draggable",
+                    "type": "boolean",
+                    "format": "checkbox",
+                    "description": "required advanced marker",
+                    "default": false,
+                    "options": {
+                        "dependencies": {
+                            "markerType": "AdvancedMarker"
+                        }
+                    }
+                }
             },
-            "enum": ["", "BOUNCE","DROP"]
-          },
-          "markerFont": {
-            "title": "Marker as Font Icon",
-            "type": "boolean",
-            "format": "checkbox",
-            "default": false,
-            "options": {
-              "dependencies": {
-                "markerType": "Marker"
-              }
-            }
-          },
-          "markerFontFamily": {
-            "title": "Font icon family name",
-            "type": "string",
-            "description": "eg: bootstrap-icons",
-            "options": {
-              "dependencies": {
-                "markerType": "Marker"
-              }
-            }
-          },
-          "markerFontCode": {
-            "title": "Font icon code point",
-            "type": "string",
-            "description": "eg: \\uF3E9",
-            "options": {
-              "dependencies": {
-                "markerType": "Marker"
-              }
-            }
-          },
-          "markerFontColor": {
-            "title": "Font icon color",
-            "type": "string",
-            "description": "eg: #109255",
-            "options": {
-              "dependencies": {
-                "markerType": "Marker"
-              }
-            }
-          },
-          "markerFontSize": {
-            "title": "Icon size",
-            "type": "string",
-            "description": "eg: 40px",
-            "options": {
-              "dependencies": {
-                "markerType": "Marker"
-              }
-            }
-          },
+            "if": {
+                "properties": {
+                    "markerType": {
+                        "const": "Marker"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "markerScaleWidth": {
+                        "title": "Marker width (scale)",
+                        "type": "string",
+                        "format": "numeric",
+                        "options": {
+                            "dependencies": {
+                                "markerType": "Marker"
+                            }
+                        }
+                    },
+                    "markerScaleHeight": {
+                        "title": "Marker height (scale)",
+                        "type": "string",
+                        "format": "numeric",
+                        "options": {
+                            "dependencies": {
+                                "markerType": "Marker"
+                            }
+                        }
+                    },
+                    "markerAnchorX": {
+                        "title": "Marker anchor (X)",
+                        "type": "string",
+                        "format": "numeric",
+                        "options": {
+                            "dependencies": {
+                                "markerType": "Marker"
+                            }
+                        }
+                    },
+                    "markerAnchorY": {
+                        "title": "Marker anchor (Y)",
+                        "type": "string",
+                        "format": "numeric",
+                        "options": {
+                            "dependencies": {
+                                "markerType": "Marker"
+                            }
+                        }
+                    },
+                    "markerAnimation": {
+                        "type": "string",
+                        "format": "select",
+                        "default": "",
+                        "options": {
+                            "dependencies": {
+                                "markerType": "Marker"
+                            },
+                            "enum_titles": ["-", "Bounce", "Drop"]
+                        },
+                        "enum": ["", "BOUNCE", "DROP"]
+                    },
+                    "markerFont": {
+                        "title": "Marker as Font Icon",
+                        "type": "boolean",
+                        "format": "checkbox",
+                        "default": false,
+                        "options": {
+                            "dependencies": {
+                                "markerType": "Marker"
+                            }
+                        }
+                    },
+                    "markerFontFamily": {
+                        "title": "Font icon family name",
+                        "type": "string",
+                        "description": "eg: bootstrap-icons",
+                        "options": {
+                            "dependencies": {
+                                "markerType": "Marker"
+                            }
+                        }
+                    },
+                    "markerFontCode": {
+                        "title": "Font icon code point",
+                        "type": "string",
+                        "description": "eg: \\uF3E9",
+                        "options": {
+                            "dependencies": {
+                                "markerType": "Marker"
+                            }
+                        }
+                    },
+                    "markerFontColor": {
+                        "title": "Font icon color",
+                        "type": "string",
+                        "description": "eg: #109255",
+                        "options": {
+                            "dependencies": {
+                                "markerType": "Marker"
+                            }
+                        }
+                    },
+                    "markerFontSize": {
+                        "title": "Icon size",
+                        "type": "string",
+                        "description": "eg: 40px",
+                        "options": {
+                            "dependencies": {
+                                "markerType": "Marker"
+                            }
+                        }
+                    },
 
-          "markerCustomHTML": {
-            "title": "Custom Marker (HTML & CSS)",
-            "type": "boolean",
-            "format": "checkbox",
-            "description": "required advanced marker",
-            "default": false,
-            "options": {
-              "dependencies": {
-                "markerType": "AdvancedMarker"
-              }
+                    "markerCustomHTML": {
+                        "title": "Custom Marker (HTML & CSS)",
+                        "type": "boolean",
+                        "format": "checkbox",
+                        "description": "required advanced marker",
+                        "default": false,
+                        "options": {
+                            "dependencies": {
+                                "markerType": "AdvancedMarker"
+                            }
+                        }
+                    },
+                    "draggable": {
+                        "title": "Makes marker draggable",
+                        "type": "boolean",
+                        "format": "checkbox",
+                        "description": "required advanced marker",
+                        "default": false,
+                        "options": {
+                            "dependencies": {
+                                "markerType": "AdvancedMarker"
+                            }
+                        }
+                    }
+                }
             }
-          },
-          "draggable": {
-            "title": "Makes marker draggable",
-            "type": "boolean",
-            "format": "checkbox",
-            "description": "required advanced marker",
-            "default": false,
-            "options": {
-              "dependencies": {
-                "markerType": "AdvancedMarker"
-              }
-            }
-          }
-
-        }
-      }
-    },
-
-    "info_window": {
-      "type": "object",
-      "options": {
-        "containerAttributes": {
-          "class": "as-none-object"
-        }
-      },
-      "properties": {
-        "infoWindow": {
-          "title": "Info Window",
-          "type": "boolean",
-          "format": "checkbox",
-          "default": false
         },
-        "infoWindowMaxWidth": {
-          "title": "Info Window Max width",
-          "type": "string",
-          "default": "",
-          "options": {
-            "dependencies": {
-              "infoWindow": true
-            }
-          }
-        },
-        "infoWindowMinWidth": {
-          "title": "Info Window Min width",
-          "type": "string",
-          "default": "",
-          "options": {
-            "dependencies": {
-              "infoWindow": true
-            }
-          }
-        }
-      },
-      "if": {
-        "properties": {
-          "infoWindow": {
-            "const": true
-          }
-        }
-      },
-      "then": {
-        "properties": {
-          "infoWindowMaxWidth": {
-            "title": "Info Window Max width",
-            "type": "string",
-            "default": "",
+
+        "info_window": {
+            "type": "object",
             "options": {
-              "dependencies": {
-                "infoWindow": true
-              }
+                "containerAttributes": {
+                    "class": "as-none-object"
+                }
+            },
+            "properties": {
+                "infoWindow": {
+                    "title": "Info Window",
+                    "type": "boolean",
+                    "format": "checkbox",
+                    "default": false
+                },
+                "infoWindowMaxWidth": {
+                    "title": "Info Window Max width",
+                    "type": "string",
+                    "default": "",
+                    "options": {
+                        "dependencies": {
+                            "infoWindow": true
+                        }
+                    }
+                },
+                "infoWindowMinWidth": {
+                    "title": "Info Window Min width",
+                    "type": "string",
+                    "default": "",
+                    "options": {
+                        "dependencies": {
+                            "infoWindow": true
+                        }
+                    }
+                }
+            },
+            "if": {
+                "properties": {
+                    "infoWindow": {
+                        "const": true
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "infoWindowMaxWidth": {
+                        "title": "Info Window Max width",
+                        "type": "string",
+                        "default": "",
+                        "options": {
+                            "dependencies": {
+                                "infoWindow": true
+                            }
+                        }
+                    },
+                    "infoWindowMinWidth": {
+                        "title": "Info Window Min width",
+                        "type": "string",
+                        "default": "",
+                        "options": {
+                            "dependencies": {
+                                "infoWindow": true
+                            }
+                        }
+                    }
+                }
             }
-          },
-          "infoWindowMinWidth": {
-            "title": "Info Window Min width",
-            "type": "string",
-            "default": "",
-            "options": {
-              "dependencies": {
-                "infoWindow": true
-              }
-            }
-          }
         }
-      }
     }
-  }
 }

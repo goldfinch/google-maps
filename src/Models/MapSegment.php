@@ -50,7 +50,7 @@ class MapSegment extends DataObject
     private static $many_many_extraFields = [
         'Markers' => [
             'SortExtra' => 'Int',
-        ]
+        ],
     ];
 
     private static $summary_fields = [
@@ -61,26 +61,19 @@ class MapSegment extends DataObject
         'Disabled.NiceAsBoolean' => 'Disabled',
     ];
 
-    private static $required_fields = [
-        'Title',
-        'Type',
-    ];
+    private static $required_fields = ['Title', 'Type'];
 
     public function RenderSegmentMap()
     {
-        if ($this->Disabled)
-        {
+        if ($this->Disabled) {
             return;
         }
 
         $partialFile = 'Components/Maps/' . $this->Type;
 
-        if (ss_theme_template_file_exists($partialFile))
-        {
+        if (ss_theme_template_file_exists($partialFile)) {
             return $this->Type ? $this->renderWith($partialFile) : null;
-        }
-        else
-        {
+        } else {
             return $this->renderWith('Goldfinch/Component/Maps/MapSegment');
         }
 
@@ -91,8 +84,7 @@ class MapSegment extends DataObject
     {
         $parameters = json_decode($this->Parameters);
 
-        if (!$parameters)
-        {
+        if (!$parameters) {
             return;
         }
 
@@ -100,40 +92,69 @@ class MapSegment extends DataObject
         $map_dynamic_str = '';
         $map_inset_overview = '';
 
-        if (property_exists($parameters, 'map_height') && $parameters->map_height)
-        {
-            $map_height = 'style="height: '.$parameters->map_height.'px"';
+        if (
+            property_exists($parameters, 'map_height') &&
+            $parameters->map_height
+        ) {
+            $map_height = 'style="height: ' . $parameters->map_height . 'px"';
         }
 
-        if (property_exists($parameters, 'map_dynamic') && $parameters->map_dynamic)
-        {
+        if (
+            property_exists($parameters, 'map_dynamic') &&
+            $parameters->map_dynamic
+        ) {
             $map_dynamic = $parameters->map_dynamic;
 
-            if (property_exists($map_dynamic, 'enabled') && $map_dynamic->enabled)
-            {
+            if (
+                property_exists($map_dynamic, 'enabled') &&
+                $map_dynamic->enabled
+            ) {
                 $map_dynamic_str = '<div id="wrapper" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background-size: cover;">
                 <button class="btn btn-primary">Load Dynamic Map</button></div>';
             }
         }
 
-        if (property_exists($parameters, 'map_inset_overview') && $parameters->map_inset_overview)
-        {
-            $map_inset_overview = '<div
-              style="display: '.($map_dynamic_str == '' ? 'block' : 'none').'; position: absolute; left: 40px; height: 175px; width: 175px; bottom: 50px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);"
-              class="map-overview-'.$this->Type.'"
-              data-map-overview="'.$this->ID.'"
+        if (
+            property_exists($parameters, 'map_inset_overview') &&
+            $parameters->map_inset_overview
+        ) {
+            $map_inset_overview =
+                '<div
+              style="display: ' .
+                ($map_dynamic_str == '' ? 'block' : 'none') .
+                '; position: absolute; left: 40px; height: 175px; width: 175px; bottom: 50px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);"
+              class="map-overview-' .
+                $this->Type .
+                '"
+              data-map-overview="' .
+                $this->ID .
+                '"
             ></div>
             ';
         }
 
-        $html = '<div class="map-segment" style="position: relative"><div
-          class="map-segment-'.$this->Type.'"
-          data-map-segment="'.$this->ID.'"
-          data-segment=\''.$this->SegmentData().'\'
-          data-parameters=\''.$this->Parameters.'\'
-          '.$map_height.'
-        >' . $map_dynamic_str . '</div>' .  $map_inset_overview
-        . '</div>';
+        $html =
+            '<div class="map-segment" style="position: relative"><div
+          class="map-segment-' .
+            $this->Type .
+            '"
+          data-map-segment="' .
+            $this->ID .
+            '"
+          data-segment=\'' .
+            $this->SegmentData() .
+            '\'
+          data-parameters=\'' .
+            $this->Parameters .
+            '\'
+          ' .
+            $map_height .
+            '
+        >' .
+            $map_dynamic_str .
+            '</div>' .
+            $map_inset_overview .
+            '</div>';
 
         $return = DBHTMLText::create();
         $return->setValue($html);
@@ -145,7 +166,12 @@ class MapSegment extends DataObject
     {
         $data = json_decode($this->SegmentData());
 
-        $url = google_maps_preview($data->Latitude, $data->Longitude, $data->Zoom, '260x140');
+        $url = google_maps_preview(
+            $data->Latitude,
+            $data->Longitude,
+            $data->Zoom,
+            '260x140',
+        );
 
         $html = DBHTMLText::create();
         $html->setValue('<img src="' . $url . '" alt="Preview image"/>');
@@ -155,8 +181,7 @@ class MapSegment extends DataObject
 
     public function MarkersCounter()
     {
-        if ($this->getSegmentTypeConfig('markers'))
-        {
+        if ($this->getSegmentTypeConfig('markers')) {
             return $this->Markers()->Count();
         }
 
@@ -167,9 +192,8 @@ class MapSegment extends DataObject
     {
         $types = $this->config()->get('segment_types');
 
-        if ($types && count($types))
-        {
-            return array_map(function($n) use ($key) {
+        if ($types && count($types)) {
+            return array_map(function ($n) use ($key) {
                 return $n[$key];
             }, $types);
         }
@@ -181,21 +205,19 @@ class MapSegment extends DataObject
     {
         $types = $this->config()->get('segment_types');
 
-        if ($types && count($types) && $this->Type && isset($types[$this->Type]))
-        {
-            if ($param)
-            {
-                if (isset($types[$this->Type][$param]))
-                {
+        if (
+            $types &&
+            count($types) &&
+            $this->Type &&
+            isset($types[$this->Type])
+        ) {
+            if ($param) {
+                if (isset($types[$this->Type][$param])) {
                     return $types[$this->Type][$param];
-                }
-                else
-                {
+                } else {
                     return null;
                 }
-            }
-            else
-            {
+            } else {
                 return $types[$this->Type];
             }
         }
@@ -207,98 +229,85 @@ class MapSegment extends DataObject
     {
         $fields = parent::getCMSFields();
 
-        $fields->removeByName([
-            'Title',
-            'Type',
-            'Disabled',
-            'Parameters',
-        ]);
+        $fields->removeByName(['Title', 'Type', 'Disabled', 'Parameters']);
 
-        if ($this->getSegmentTypeConfig('markers'))
-        {
+        if ($this->getSegmentTypeConfig('markers')) {
             $markersGrid = $fields->dataFieldByName('Markers');
-            $markersGrid->getConfig()
+            $markersGrid
+                ->getConfig()
                 ->removeComponentsByType(GridFieldDeleteAction::class)
                 ->removeComponentsByType(GridFieldAddNewButton::class)
                 ->removeComponentsByType(GridFieldPrintButton::class)
                 ->removeComponentsByType(GridFieldExportButton::class)
                 ->removeComponentsByType(GridFieldImportButton::class)
-                ->removeComponentsByType(GridFieldAddExistingAutocompleter::class)
-                // ->removeComponentsByType(GridFieldPaginator::class)
-                // ->addComponent(GridFieldConfigurablePaginator::create())
-            ;
-        }
-        else
-        {
+                ->removeComponentsByType(
+                    GridFieldAddExistingAutocompleter::class,
+                    // ->removeComponentsByType(GridFieldPaginator::class)
+                    // ->addComponent(GridFieldConfigurablePaginator::create())
+                );
+        } else {
             $fields->removeByName('Markers');
         }
 
         $typesOptions = $this->getSegmentListOfTypes();
 
         $mainFields = [
-          TextField::create(
-              'Title',
-              'Title'
-          ),
-          CheckboxField::create('Disabled', 'Disabled')->setDescription('hide this map across the website'),
-          DropdownField::create(
-              'Type',
-              'Type',
-              $typesOptions ?? [],
-          ),
-          MapField::create('Map'),
+            TextField::create('Title', 'Title'),
+            CheckboxField::create('Disabled', 'Disabled')->setDescription(
+                'hide this map across the website',
+            ),
+            DropdownField::create('Type', 'Type', $typesOptions ?? []),
+            MapField::create('Map'),
         ];
 
-        $fields->addFieldsToTab(
-            'Root.Main', $mainFields,
-        );
+        $fields->addFieldsToTab('Root.Main', $mainFields);
 
-        if ($this->ID && $this->Type)
-        {
-            $schemaParamsPath = BASE_PATH . '/vendor/goldfinch/google-maps/_schema/' . 'map.json';
+        if ($this->ID && $this->Type) {
+            $schemaParamsPath =
+                BASE_PATH .
+                '/vendor/goldfinch/google-maps/_schema/' .
+                'map.json';
 
-            if (file_exists($schemaParamsPath))
-            {
+            if (file_exists($schemaParamsPath)) {
                 $schemaParams = file_get_contents($schemaParamsPath);
 
-                $fields->addFieldsToTab(
-                    'Root.Settings',
-                    [
-                        JSONEditorField::create('Parameters', 'Parameters', $this, [], '{}', null, $schemaParams),
-                    ]
-                );
+                $fields->addFieldsToTab('Root.Settings', [
+                    JSONEditorField::create(
+                        'Parameters',
+                        'Parameters',
+                        $this,
+                        [],
+                        '{}',
+                        null,
+                        $schemaParams,
+                    ),
+                ]);
             }
         }
 
-        if ($this->ID)
-        {
-            $fields->addFieldsToTab(
-              'Root.Markers',
-              [
-                  GridField::create(
+        if ($this->ID) {
+            $fields->addFieldsToTab('Root.Markers', [
+                GridField::create(
                     'Markers',
                     'Markers',
                     $this->Markers(),
                     $cfg = GridFieldManyManyConfig::create(null, 'SortExtra'),
-                  )
-              ]
-            );
+                ),
+            ]);
 
-            $dataColumns = $cfg->getComponentByType(GridFieldDataColumns::class);
+            $dataColumns = $cfg->getComponentByType(
+                GridFieldDataColumns::class,
+            );
 
             $dataColumns->setDisplayFields([
                 'MapThumbnail' => 'Map',
                 'Title' => 'Title',
-                'Created' => 'Received at'
+                'Created' => 'Received at',
             ]);
         }
 
-        if ($this->getSegmentTypeConfig('settings'))
-        {
-            $fields->addFieldsToTab(
-                'Root.Settings',
-                []
-            );
+        if ($this->getSegmentTypeConfig('settings')) {
+            $fields->addFieldsToTab('Root.Settings', []);
         }
 
         return $fields;
@@ -308,10 +317,8 @@ class MapSegment extends DataObject
     {
         $changed = $this->getChangedFields();
 
-        if (isset($changed['Type']))
-        {
-            if ($changed['Type']['before'] != $changed['Type']['after'])
-            {
+        if (isset($changed['Type'])) {
+            if ($changed['Type']['before'] != $changed['Type']['after']) {
                 $this->Parameters = '';
             }
         }
@@ -323,13 +330,14 @@ class MapSegment extends DataObject
     {
         $data = [];
 
-        foreach ($this->Markers() as $marker)
-        {
+        foreach ($this->Markers() as $marker) {
             $iw = $marker->infoWindow();
 
             $data[] = [
                 'Title' => $marker->Title,
-                'Icon' => $marker->Icon()->exists() ? $marker->Icon()->getURL() : null,
+                'Icon' => $marker->Icon()->exists()
+                    ? $marker->Icon()->getURL()
+                    : null,
                 'InfoWindow' => $iw ? $iw->RAW() : null,
                 'Latitude' => (float) $marker->Map->Latitude,
                 'Longitude' => (float) $marker->Map->Longitude,
@@ -346,14 +354,18 @@ class MapSegment extends DataObject
 
         $theme = '';
 
-        if ($parameters)
-        {
-            if ($parameters->map_theme->theme && $parameters->map_theme->theme != 'custom')
-            {
-                $theme = BASE_PATH . '/vendor/goldfinch/google-maps/_schema/map-styles/' . $parameters->map_theme->theme . '.json';
+        if ($parameters) {
+            if (
+                $parameters->map_theme->theme &&
+                $parameters->map_theme->theme != 'custom'
+            ) {
+                $theme =
+                    BASE_PATH .
+                    '/vendor/goldfinch/google-maps/_schema/map-styles/' .
+                    $parameters->map_theme->theme .
+                    '.json';
 
-                if (file_exists($theme))
-                {
+                if (file_exists($theme)) {
                     $theme = file_get_contents($theme);
                 }
             }

@@ -21,16 +21,16 @@ class MapsAdmin extends ModelAdmin
 
     private static $managed_models = [
         MapSegment::class => [
-            'title'=> 'Maps',
+            'title' => 'Maps',
         ],
         MapMarker::class => [
-            'title'=> 'Markers',
+            'title' => 'Markers',
         ],
         MapBlock::class => [
-            'title'=> 'Blocks',
+            'title' => 'Blocks',
         ],
         MapConfig::class => [
-            'title'=> 'Settings',
+            'title' => 'Settings',
         ],
     ];
 }

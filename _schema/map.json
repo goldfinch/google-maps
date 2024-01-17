@@ -1,307 +1,288 @@
 {
-  "type": "object",
-  "options": {},
-  "properties": {
-    "map_dynamic": {
-      "type": "object",
-      "options": {
-        "containerAttributes": {
-          "class": "as-none-object"
-        }
-      },
-      "properties": {
-        "enabled": {
-          "title": "Dynamic map loading, loads on click",
-          "type": "boolean",
-          "format": "checkbox",
-          "default": false
-        },
-        "preview": {
-          "title": "Use preview image",
-          "type": "boolean",
-          "format": "checkbox",
-          "default": false,
-          "options": {
-            "dependencies": {
-              "enabled": true
+    "type": "object",
+    "options": {},
+    "properties": {
+        "map_dynamic": {
+            "type": "object",
+            "options": {
+                "containerAttributes": {
+                    "class": "as-none-object"
+                }
+            },
+            "properties": {
+                "enabled": {
+                    "title": "Dynamic map loading, loads on click",
+                    "type": "boolean",
+                    "format": "checkbox",
+                    "default": false
+                },
+                "preview": {
+                    "title": "Use preview image",
+                    "type": "boolean",
+                    "format": "checkbox",
+                    "default": false,
+                    "options": {
+                        "dependencies": {
+                            "enabled": true
+                        }
+                    }
+                }
+            },
+            "if": {
+                "properties": {
+                    "enabled": {
+                        "const": true
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "preview": {
+                        "title": "Use preview image",
+                        "type": "boolean",
+                        "format": "checkbox",
+                        "default": false,
+                        "options": {
+                            "dependencies": {
+                                "enabled": true
+                            }
+                        }
+                    }
+                }
             }
-          }
-        }
-      },
-      "if": {
-        "properties": {
-          "enabled": {
-            "const": true
-          }
-        }
-      },
-      "then": {
-        "properties": {
-          "preview": {
-            "title": "Use preview image",
+        },
+        "map_theme": {
+            "type": "object",
+            "options": {
+                "containerAttributes": {
+                    "class": "as-none-object"
+                }
+            },
+            "properties": {
+                "theme": {
+                    "title": "Pre-defined theme style",
+                    "type": "string",
+                    "default": "",
+                    "description": "styles apply only when there is no `Map ID` specified",
+                    "format": "select",
+                    "enum": [
+                        "",
+                        "silver",
+                        "retro",
+                        "night",
+                        "dark",
+                        "aubergine",
+                        "custom"
+                    ],
+                    "options": {
+                        "enum_titles": [
+                            "-",
+                            "Silver",
+                            "Retro",
+                            "Night",
+                            "Dark",
+                            "Aubergine",
+                            "* Custom theme"
+                        ]
+                    }
+                },
+                "styles": {
+                    "title": "Custom styles (JSON)",
+                    "description": "https://mapstyle.withgoogle.com",
+                    "type": "string",
+                    "format": "textarea",
+                    "options": {
+                        "dependencies": {
+                            "theme": "custom"
+                        }
+                    }
+                }
+            },
+            "if": {
+                "properties": {
+                    "theme": {
+                        "const": "custom"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "styles": {
+                        "title": "Custom styles (JSON)",
+                        "description": "https://mapstyle.withgoogle.com",
+                        "type": "string",
+                        "format": "textarea",
+                        "options": {
+                            "dependencies": {
+                                "theme": "custom"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "map_inset_overview": {
+            "title": "Inset Overview Map",
             "type": "boolean",
             "format": "checkbox",
-            "default": false,
-            "options": {
-              "dependencies": {
-                "enabled": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "map_theme": {
-      "type": "object",
-      "options": {
-        "containerAttributes": {
-          "class": "as-none-object"
-        }
-      },
-      "properties": {
-        "theme": {
-          "title": "Pre-defined theme style",
-          "type": "string",
-          "default": "",
-          "description": "styles apply only when there is no `Map ID` specified",
-          "format": "select",
-          "enum": [
-            "",
-            "silver",
-            "retro",
-            "night",
-            "dark",
-            "aubergine",
-            "custom"
-          ],
-          "options": {
-            "enum_titles": [
-              "-",
-              "Silver",
-              "Retro",
-              "Night",
-              "Dark",
-              "Aubergine",
-              "* Custom theme"
-            ]
-          }
+            "default": false
         },
-        "styles": {
-          "title": "Custom styles (JSON)",
-          "description": "https://mapstyle.withgoogle.com",
-          "type": "string",
-          "format": "textarea",
-          "options": {
-            "dependencies": {
-              "theme": "custom"
-            }
-          }
-        }
-      },
-      "if": {
-        "properties": {
-          "theme": {
-            "const": "custom"
-          }
-        }
-      },
-      "then": {
-        "properties": {
-          "styles": {
-            "title": "Custom styles (JSON)",
-            "description": "https://mapstyle.withgoogle.com",
+        "map_height": {
+            "title": "Height of the map",
             "type": "string",
-            "format": "textarea",
+            "default": "400"
+        },
+        "mapId": {
+            "title": "Map ID (could have its own styling)",
+            "type": "string",
+            "description": "eg: 4504f8b37365c3d0 (https://developers.google.com/maps/documentation/get-map-id)",
+            "default": ""
+        },
+        "mapTypeId": {
+            "title": "Map type",
+            "type": "string",
+            "default": "roadmap",
+            "format": "select",
+            "uniqueItems": true,
+            "enum": ["hybrid", "roadmap", "satellite", "terrain"],
             "options": {
-              "dependencies": {
-                "theme": "custom"
-              }
+                "enum_titles": ["Hybrid", "Roadmap", "Satellite", "Terrain"]
             }
-          }
+        },
+        "backgroundColor": {
+            "title": "Color used for the background of the Map div",
+            "type": "string",
+            "format": "color",
+            "default": "#ffffff"
+        },
+        "disableDoubleClickZoom": {
+            "title": "Disables zoom and center on double click",
+            "type": "boolean",
+            "format": "checkbox",
+            "default": false
+        },
+        "clickableIcons": {
+            "title": "Makes map icons clickable",
+            "type": "boolean",
+            "format": "checkbox",
+            "default": true
+        },
+        "zoomControl": {
+            "title": "Zoom control",
+            "type": "boolean",
+            "format": "checkbox",
+            "default": true
+        },
+        "mapTypeControl": {
+            "title": "Enable initial state of the Map type control",
+            "type": "boolean",
+            "format": "checkbox",
+            "default": true
+        },
+        "scaleControl": {
+            "title": "Scale control that provides a simple map scale",
+            "type": "boolean",
+            "format": "checkbox",
+            "default": false
+        },
+        "streetViewControl": {
+            "title": "Pegman control that lets the user activate a Street View panorama",
+            "type": "boolean",
+            "format": "checkbox",
+            "default": true
+        },
+        "rotateControl": {
+            "title": "Enable state of the Rotate control",
+            "type": "boolean",
+            "format": "checkbox",
+            "default": false
+        },
+        "fullscreenControl": {
+            "title": "Enable state of the Fullscreen control",
+            "type": "boolean",
+            "format": "checkbox",
+            "default": true
+        },
+        "scrollwheel": {
+            "title": "Enable zooming on the map using a mouse scroll wheel",
+            "type": "string",
+            "default": "",
+            "format": "select",
+            "enum": ["", "true", "false"],
+            "options": {
+                "enum_titles": [
+                    "Default (scroll with command key)",
+                    "Free scroll (not recommended)",
+                    "Disabled scroll"
+                ]
+            }
+        },
+        "isFractionalZoomEnabled": {
+            "title": "Whether the map should allow fractional zoom levels",
+            "type": "boolean",
+            "format": "checkbox",
+            "default": false
+        },
+        "keyboardShortcuts": {
+            "title": "Map can be controlled by the keyboard",
+            "type": "boolean",
+            "format": "checkbox",
+            "default": true
+        },
+        "draggable": {
+            "title": "Draggable",
+            "type": "boolean",
+            "format": "checkbox",
+            "default": true
+        },
+        "noClear": {
+            "title": "Do not clear the contents of the Map div",
+            "type": "boolean",
+            "format": "checkbox",
+            "default": false
+        },
+        "maxZoom": {
+            "title": "The maximum zoom level which will be displayed on the map",
+            "type": "string",
+            "format": "number",
+            "default": ""
+        },
+        "minZoom": {
+            "title": "The minimum zoom level which will be displayed on the map",
+            "type": "string",
+            "format": "number",
+            "default": ""
+        },
+        "controlSize": {
+            "title": "Size in pixels of the controls appearing on the map",
+            "type": "string",
+            "format": "number",
+            "default": ""
+        },
+        "draggableCursor": {
+            "title": "The name or url of the cursor to display when mousing over a draggable map",
+            "type": "string",
+            "default": ""
+        },
+        "draggingCursor": {
+            "title": "The name or url of the cursor to display when the map is being dragged",
+            "type": "string",
+            "default": ""
+        },
+        "gestureHandling": {
+            "title": "This setting controls how the API handles gestures on the map",
+            "type": "string",
+            "default": "auto",
+            "description": "'cooperative': Scroll events and one-finger touch gestures scroll the page, and do not zoom or pan the map. Two-finger touch gestures pan and zoom the map. Scroll events with a ctrl key or ⌘ key pressed zoom the map. In this mode the map cooperates with the page. 'greedy': All touch gestures and scroll events pan or zoom the map. 'none': The map cannot be panned or zoomed by user gestures. 'auto': (default) Gesture handling is either cooperative or greedy, depending on whether the page is scrollable or in an iframe",
+            "format": "select",
+            "uniqueItems": true,
+            "enum": ["cooperative", "greedy", "none", "auto"]
+        },
+        "heading": {
+            "title": "The heading for aerial imagery in degrees measured clockwise from cardinal direction North. Headings are snapped to the nearest available angle for which imagery is available",
+            "type": "string",
+            "format": "number",
+            "default": ""
         }
-      }
-    },
-    "map_inset_overview": {
-      "title": "Inset Overview Map",
-      "type": "boolean",
-      "format": "checkbox",
-      "default": false
-    },
-    "map_height": {
-      "title": "Height of the map",
-      "type": "string",
-      "default": "400"
-    },
-    "mapId": {
-      "title": "Map ID (could have its own styling)",
-      "type": "string",
-      "description": "eg: 4504f8b37365c3d0 (https://developers.google.com/maps/documentation/get-map-id)",
-      "default": ""
-    },
-    "mapTypeId": {
-      "title": "Map type",
-      "type": "string",
-      "default": "roadmap",
-      "format": "select",
-      "uniqueItems": true,
-      "enum": [
-        "hybrid",
-        "roadmap",
-        "satellite",
-        "terrain"
-      ],
-      "options": {
-        "enum_titles": [
-          "Hybrid",
-          "Roadmap",
-          "Satellite",
-          "Terrain"
-        ]
-      }
-    },
-    "backgroundColor": {
-      "title": "Color used for the background of the Map div",
-      "type": "string",
-      "format": "color",
-      "default": "#ffffff"
-    },
-    "disableDoubleClickZoom": {
-      "title": "Disables zoom and center on double click",
-      "type": "boolean",
-      "format": "checkbox",
-      "default": false
-    },
-    "clickableIcons": {
-      "title": "Makes map icons clickable",
-      "type": "boolean",
-      "format": "checkbox",
-      "default": true
-    },
-    "zoomControl": {
-      "title": "Zoom control",
-      "type": "boolean",
-      "format": "checkbox",
-      "default": true
-    },
-    "mapTypeControl": {
-      "title": "Enable initial state of the Map type control",
-      "type": "boolean",
-      "format": "checkbox",
-      "default": true
-    },
-    "scaleControl": {
-      "title": "Scale control that provides a simple map scale",
-      "type": "boolean",
-      "format": "checkbox",
-      "default": false
-    },
-    "streetViewControl": {
-      "title": "Pegman control that lets the user activate a Street View panorama",
-      "type": "boolean",
-      "format": "checkbox",
-      "default": true
-    },
-    "rotateControl": {
-      "title": "Enable state of the Rotate control",
-      "type": "boolean",
-      "format": "checkbox",
-      "default": false
-    },
-    "fullscreenControl": {
-      "title": "Enable state of the Fullscreen control",
-      "type": "boolean",
-      "format": "checkbox",
-      "default": true
-    },
-    "scrollwheel": {
-      "title": "Enable zooming on the map using a mouse scroll wheel",
-      "type": "string",
-      "default": "",
-      "format": "select",
-      "enum": [
-        "",
-        "true",
-        "false"
-      ],
-      "options": {
-        "enum_titles": [
-          "Default (scroll with command key)",
-          "Free scroll (not recommended)",
-          "Disabled scroll"
-        ]
-      }
-    },
-    "isFractionalZoomEnabled": {
-      "title": "Whether the map should allow fractional zoom levels",
-      "type": "boolean",
-      "format": "checkbox",
-      "default": false
-    },
-    "keyboardShortcuts": {
-      "title": "Map can be controlled by the keyboard",
-      "type": "boolean",
-      "format": "checkbox",
-      "default": true
-    },
-    "draggable": {
-      "title": "Draggable",
-      "type": "boolean",
-      "format": "checkbox",
-      "default": true
-    },
-    "noClear": {
-      "title": "Do not clear the contents of the Map div",
-      "type": "boolean",
-      "format": "checkbox",
-      "default": false
-    },
-    "maxZoom": {
-      "title": "The maximum zoom level which will be displayed on the map",
-      "type": "string",
-      "format": "number",
-      "default": ""
-    },
-    "minZoom": {
-      "title": "The minimum zoom level which will be displayed on the map",
-      "type": "string",
-      "format": "number",
-      "default": ""
-    },
-    "controlSize": {
-      "title": "Size in pixels of the controls appearing on the map",
-      "type": "string",
-      "format": "number",
-      "default": ""
-    },
-    "draggableCursor": {
-      "title": "The name or url of the cursor to display when mousing over a draggable map",
-      "type": "string",
-      "default": ""
-    },
-    "draggingCursor": {
-      "title": "The name or url of the cursor to display when the map is being dragged",
-      "type": "string",
-      "default": ""
-    },
-    "gestureHandling": {
-      "title": "This setting controls how the API handles gestures on the map",
-      "type": "string",
-      "default": "auto",
-      "description": "'cooperative': Scroll events and one-finger touch gestures scroll the page, and do not zoom or pan the map. Two-finger touch gestures pan and zoom the map. Scroll events with a ctrl key or ⌘ key pressed zoom the map. In this mode the map cooperates with the page. 'greedy': All touch gestures and scroll events pan or zoom the map. 'none': The map cannot be panned or zoomed by user gestures. 'auto': (default) Gesture handling is either cooperative or greedy, depending on whether the page is scrollable or in an iframe",
-      "format": "select",
-      "uniqueItems": true,
-      "enum": [
-        "cooperative",
-        "greedy",
-        "none",
-        "auto"
-      ]
-    },
-    "heading": {
-      "title": "The heading for aerial imagery in degrees measured clockwise from cardinal direction North. Headings are snapped to the nearest available angle for which imagery is available",
-      "type": "string",
-      "format": "number",
-      "default": ""
     }
-  }
 }

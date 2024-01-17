@@ -43,26 +43,23 @@ class MapMarker extends DataObject
         'Icon' => File::class,
     ];
 
-    private static $owns = [
-        'Icon',
-    ];
+    private static $owns = ['Icon'];
 
-    private static $required_fields = [
-        'Title',
-    ];
+    private static $required_fields = ['Title'];
 
     public function infoWindow()
     {
         $path = 'Components/Maps/InfoWindows/' . $this->InfoWindowTemplate;
 
-        if (!ss_theme_template_file_exists($path))
-        {
+        if (!ss_theme_template_file_exists($path)) {
             return null;
         }
 
         // ! important check: this mthod will be called within the admin for summary_fields data, therefore `renderWith` will through an error. To avoid this, the check below determins the raugh difference between the admin and the frontend call.
-        if (array_key_exists('', $this->sourceQueryParams) && $this->sourceQueryParams[''] == null)
-        {
+        if (
+            array_key_exists('', $this->sourceQueryParams) &&
+            $this->sourceQueryParams[''] == null
+        ) {
             return null;
         }
 
@@ -71,7 +68,12 @@ class MapMarker extends DataObject
 
     public function MapThumbnail()
     {
-        $url = google_maps_preview($this->Map->Latitude, $this->Map->Longitude, $this->Map->Zoom, '260x140');
+        $url = google_maps_preview(
+            $this->Map->Latitude,
+            $this->Map->Longitude,
+            $this->Map->Zoom,
+            '260x140',
+        );
 
         $html = DBHTMLText::create();
         $html->setValue('<img src="' . $url . '" alt="Preview image"/>');
@@ -85,28 +87,25 @@ class MapMarker extends DataObject
 
         $fields = $fields->makeReadonly();
 
-        $fields->removeByName([
-            'SegmentID',
-            'Parameters',
-        ]);
+        $fields->removeByName(['SegmentID', 'Parameters']);
 
         $infoWindowTemplates = [
             '' => '-',
         ];
 
         // scan for template files
-        $dir = THEMES_PATH . '/' . ss_theme() . '/templates/Components/Maps/InfoWindows/';
+        $dir =
+            THEMES_PATH .
+            '/' .
+            ss_theme() .
+            '/templates/Components/Maps/InfoWindows/';
 
-        if (is_dir($dir))
-        {
+        if (is_dir($dir)) {
             $files = scandir($dir);
 
-            if (count($files))
-            {
-                foreach($files as $file)
-                {
-                    if (substr($file, -3) == '.ss')
-                    {
+            if (count($files)) {
+                foreach ($files as $file) {
+                    if (substr($file, -3) == '.ss') {
                         $name = substr($file, 0, -3);
 
                         $infoWindowTemplates[$name] = $name;
@@ -116,30 +115,38 @@ class MapMarker extends DataObject
         }
 
         $mainFields = [
-          TextField::create('Title', 'Title'),
-          UploadField::create('Icon', 'Icon')->setFolderName('maps'),
-          DropdownField::create('InfoWindowTemplate', 'Info Window Template', $infoWindowTemplates)->setDescription('Info Window option in Settings needs  to be enabled for this to work.<br>Place your template in `/themes/{theme}/templates/Components/Maps/InfoWindows/you_template_name.ss`'),
-          MapField::create('Map'),
+            TextField::create('Title', 'Title'),
+            UploadField::create('Icon', 'Icon')->setFolderName('maps'),
+            DropdownField::create(
+                'InfoWindowTemplate',
+                'Info Window Template',
+                $infoWindowTemplates,
+            )->setDescription(
+                'Info Window option in Settings needs  to be enabled for this to work.<br>Place your template in `/themes/{theme}/templates/Components/Maps/InfoWindows/you_template_name.ss`',
+            ),
+            MapField::create('Map'),
         ];
 
-        $fields->addFieldsToTab(
-            'Root.Main', $mainFields,
-        );
+        $fields->addFieldsToTab('Root.Main', $mainFields);
 
-        if ($this->ID)
-        {
-            $schemaParamsPath = BASE_PATH . '/vendor/goldfinch/google-maps/_schema/marker.json';
+        if ($this->ID) {
+            $schemaParamsPath =
+                BASE_PATH . '/vendor/goldfinch/google-maps/_schema/marker.json';
 
-            if (file_exists($schemaParamsPath))
-            {
+            if (file_exists($schemaParamsPath)) {
                 $schemaParams = file_get_contents($schemaParamsPath);
 
-                $fields->addFieldsToTab(
-                    'Root.Settings',
-                    [
-                        JSONEditorField::create('Parameters', 'Parameters', $this, [], '{}', null, $schemaParams),
-                    ]
-                );
+                $fields->addFieldsToTab('Root.Settings', [
+                    JSONEditorField::create(
+                        'Parameters',
+                        'Parameters',
+                        $this,
+                        [],
+                        '{}',
+                        null,
+                        $schemaParams,
+                    ),
+                ]);
             }
         }
 

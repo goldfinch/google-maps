@@ -20,24 +20,17 @@ class MapBlock extends BaseElement
         'Segment' => MapSegment::class,
     ];
 
-    private static $owns = [
-        'Segment',
-    ];
+    private static $owns = ['Segment'];
 
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
 
-        $fields->removeByName([
-            'SegmentID',
-        ]);
+        $fields->removeByName(['SegmentID']);
 
-        $fields->addFieldsToTab(
-            'Root.Main',
-            [
-                HasOneButtonField::create($this, 'Segment'),
-            ]
-        );
+        $fields->addFieldsToTab('Root.Main', [
+            HasOneButtonField::create($this, 'Segment'),
+        ]);
 
         return $fields;
     }

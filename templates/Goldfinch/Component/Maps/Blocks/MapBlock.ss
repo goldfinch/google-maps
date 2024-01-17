@@ -1,5 +1,5 @@
 <% if Segment %>
-    <% with Segment %>
-        $RenderSegmentMap
-    <% end_with %>
+  <% with Segment %>
+    $RenderSegmentMap
+  <% end_with %>
 <% end_if%>

@@ -2,9 +2,7 @@
     "name": "goldfinch/google-maps",
     "description": "",
     "type": "silverstripe-vendormodule",
-    "keywords": [
-        "silverstripe"
-    ],
+    "keywords": ["silverstripe"],
     "license": "MIT",
     "authors": [
         {
@@ -25,9 +23,7 @@
         "silvershop/silverstripe-hasonefield": "dev-main"
     },
     "extra": {
-        "expose": [
-            "client/dist"
-        ]
+        "expose": ["client/dist"]
     },
     "autoload": {
         "psr-4": {
