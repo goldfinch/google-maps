@@ -13,13 +13,4 @@ class MapConfig extends DataObject implements TemplateGlobalProvider
     private static $table_name = 'MapConfig';
 
     private static $db = [];
-
-    public function getCMSFields()
-    {
-        $fields = parent::getCMSFields();
-
-        // ..
-
-        return $fields;
-    }
 }

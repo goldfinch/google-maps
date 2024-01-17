@@ -7,12 +7,11 @@ use SilverStripe\Forms\TextField;
 use SilverStripe\Core\Environment;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DropdownField;
-use SilverStripe\Security\Permission;
-use Goldfinch\GoogleFields\Forms\MapField;
-use SilverStripe\ORM\FieldType\DBHTMLText;
-use SilverStripe\Forms\GridField\GridField;
 use Goldfinch\GoogleMaps\Blocks\MapBlock;
+use SilverStripe\ORM\FieldType\DBHTMLText;
+use Goldfinch\GoogleFields\Forms\MapField;
 use Goldfinch\GoogleMaps\Models\MapMarker;
+use SilverStripe\Forms\GridField\GridField;
 use Goldfinch\JSONEditor\Forms\JSONEditorField;
 use Goldfinch\JSONEditor\ORM\FieldType\DBJSONText;
 use SilverStripe\Forms\GridField\GridFieldDataColumns;
@@ -62,22 +61,6 @@ class MapSegment extends DataObject
         'Disabled.NiceAsBoolean' => 'Disabled',
     ];
 
-    // private static $belongs_to = [];
-    // private static $belongs_many_many = [];
-
-    // private static $default_sort = null;
-    // private static $indexes = null;
-    // private static $casting = [];
-    // private static $defaults = [];
-
-    // private static $field_labels = [];
-    // private static $searchable_fields = [];
-
-    // private static $cascade_deletes = [];
-    // private static $cascade_duplicates = [];
-
-    // * goldfinch/helpers
-    // private static $field_descriptions = [];
     private static $required_fields = [
         'Title',
         'Type',
@@ -321,15 +304,6 @@ class MapSegment extends DataObject
         return $fields;
     }
 
-    // public function validate()
-    // {
-    //     $result = parent::validate();
-
-    //     // $result->addError('Error message');
-
-    //     return $result;
-    // }
-
     public function onBeforeWrite()
     {
         $changed = $this->getChangedFields();
@@ -396,31 +370,4 @@ class MapSegment extends DataObject
 
         return json_encode($data);
     }
-
-    // public function onBeforeDelete()
-    // {
-    //     // ..
-
-    //     parent::onBeforeDelete();
-    // }
-
-    // public function canView($member = null)
-    // {
-    //     return Permission::check('CMS_ACCESS_Company\Website\MyAdmin', 'any', $member);
-    // }
-
-    // public function canEdit($member = null)
-    // {
-    //     return Permission::check('CMS_ACCESS_Company\Website\MyAdmin', 'any', $member);
-    // }
-
-    // public function canDelete($member = null)
-    // {
-    //     return Permission::check('CMS_ACCESS_Company\Website\MyAdmin', 'any', $member);
-    // }
-
-    // public function canCreate($member = null, $context = [])
-    // {
-    //     return Permission::check('CMS_ACCESS_Company\Website\MyAdmin', 'any', $member);
-    // }
 }
