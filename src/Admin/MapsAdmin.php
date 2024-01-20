@@ -33,4 +33,21 @@ class MapsAdmin extends ModelAdmin
             'title' => 'Settings',
         ],
     ];
+
+    public function getManagedModels()
+    {
+        $models = parent::getManagedModels();
+
+        $cfg = MapConfig::current_config();
+
+        if (!class_exists('DNADesign\Elemental\Models\BaseElement')) {
+            unset($models[MapBlock::class]);
+        }
+
+        if (empty($cfg->config('db')->db)) {
+            unset($models[MapConfig::class]);
+        }
+
+        return $models;
+    }
 }
