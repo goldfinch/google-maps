@@ -1,22 +1,7 @@
 TODO
-
+* use harvest
 * Marker Font Icon [checked] - hide scale w/h ancho x/y
 
-1)
-
-app/_config/google-maps.yml
-```
----
-Name: app-google-maps
----
-
-Goldfinch\GoogleMaps\Models\MapSegment:
-  segment_types:
-    office:
-      label: 'Office map'
-      settings: true
-      markers: true
-```
 
 2)
 
@@ -25,43 +10,13 @@ Goldfinch\GoogleMaps\Models\MapSegment:
 APP_GOOGLE_MAPS_KEY=""
 ```
 
-3)
-
-app/_schema/map-{segment_type}.json
-```
-{
-    "type": "array",
-    "options": {},
-    "items": {
-        "type": "object",
-        "properties": {
-            "example": {
-                "title": "Example",
-                "type": "string",
-                "default": "default example text"
-              }
-        }
-      }
-
-  }
-```
-
-4)
-
-themes/{theme}/templates/Components/Maps/{segment_type}.ss
-
-```
-my custom template for specific segment type
-```
-
 ---
 
 InfoWindow template
 
 ```
-themes/{theme}/templates/Components/Maps/InfoWindows/my_infowindow_template.ss
+php taz make:map-infowindow:template
 ```
-
 ---- 
 
 

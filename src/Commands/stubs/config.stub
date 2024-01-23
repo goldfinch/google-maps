@@ -1,0 +1,22 @@
+---
+Name: app-{{ class }}
+After: "goldfinch/google-maps"
+---
+Goldfinch\GoogleMaps\Admin\MapsAdmin:
+  # menu_priority: 1
+  extensions:
+    - {{ namespace_root_extensions }}MapsAdminExtension
+
+Goldfinch\GoogleMaps\Configs\MapConfig:
+  extensions:
+    - {{ namespace_root_extensions }}MapConfigExtension
+
+Goldfinch\GoogleMaps\Blocks\MapBlock:
+  # icon: ""
+  extensions:
+    - {{ namespace_root_extensions }}MapBlockExtension
+
+Goldfinch\GoogleMaps\Models\MapSegment:
+  extensions:
+    - {{ namespace_root_extensions }}MapSegmentExtension
+  segment_types:

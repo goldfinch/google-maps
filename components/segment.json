@@ -1,0 +1,14 @@
+{
+    "type": "array",
+    "options": {},
+    "items": {
+        "type": "object",
+        "properties": {
+            "example": {
+                "title": "Example",
+                "type": "string",
+                "default": "default example text"
+              }
+        }
+    }
+}
