@@ -12,6 +12,8 @@ class MapsTemplatesCommand extends GeneratorCommand
 
     protected $description = 'Publish [goldfinch/google-maps] templates';
 
+    protected $no_arguments = true;
+
     protected function execute($input, $output): int
     {
         $templater = Templater::create($input, $output, $this, 'goldfinch/google-maps');
