@@ -74,7 +74,7 @@ class MapSegment extends DataObject
         if (ss_theme_template_file_exists($partialFile)) {
             return $this->Type ? $this->renderWith($partialFile) : null;
         } else {
-            return $this->renderWith('Goldfinch/Component/Maps/MapSegment');
+            return $this->renderWith('Goldfinch/GoogleMaps/Models/MapSegment');
         }
 
         return null;

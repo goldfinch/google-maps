@@ -22,8 +22,8 @@ class MapsTemplatesCommand extends GeneratorCommand
 
         if (is_string($theme)) {
 
-            $componentPath = BASE_PATH . '/vendor/goldfinch/google-maps/templates/Goldfinch/Component/Maps/';
-            $themePath = 'themes/' . $theme . '/templates/Goldfinch/Component/Maps/';
+            $componentPath = BASE_PATH . '/vendor/goldfinch/google-maps/templates/Goldfinch/GoogleMaps/Models/';
+            $themePath = 'themes/' . $theme . '/templates/Goldfinch/GoogleMaps/Models/';
 
             $files = [
                 // no need to customize MapBlock
