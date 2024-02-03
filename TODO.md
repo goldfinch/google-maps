@@ -17,6 +17,8 @@ InfoWindow template
 ```
 php taz make:map-infowindow:template
 ```
+
+3) Create segment in admin selecting type. Then go to Segment settings (might work in main tab too) and hit save, to save default 'Parameters' to the database. (might need to set default Parameters automatically to skip this step)
 ---- 
 
 
@@ -53,6 +55,25 @@ resolve: {
 or
 ```
 Requirements::javascript('goldfinch/google-maps:client/dist/map.js');
+```
+
+---- for Map
+
+(Maps JavaScript API)
+https://console.cloud.google.com/apis/library/maps-backend.googleapis.com
+
+---- For Preview Thumbs requires additionl librariy
+
+(Maps Static API)
+https://console.cloud.google.com/apis/library/static-maps-backend.googleapis.com
+
+---- disable blue border on map focus
+
+```scss
+// Google Maps disable blue border
+.gm-style iframe + div {
+  border: none !important;
+}
 ```
 
 ---

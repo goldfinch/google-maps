@@ -82,7 +82,7 @@ class MapSegment extends DataObject
 
     public function MapElement()
     {
-        $parameters = json_decode($this->Parameters);
+        $parameters = json_decode($this->Parameters ?? '{}');
 
         if (!$parameters) {
             return;
