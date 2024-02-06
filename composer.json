@@ -19,7 +19,6 @@
         "goldfinch/helpers": "^1.0",
         "goldfinch/taz": "^1.0",
         "jonom/silverstripe-someconfig": "^1.0",
-        "dnadesign/silverstripe-elemental": "^5.0",
         "silvershop/silverstripe-hasonefield": "dev-main"
     },
     "extra": {
