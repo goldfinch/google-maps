@@ -17,5 +17,5 @@ class MapBlockExtensionCommand extends GeneratorCommand
 
     protected $stub = './stubs/mapblock-extension.stub';
 
-    protected $prefix = 'Extension';
+    protected $suffix = 'Extension';
 }

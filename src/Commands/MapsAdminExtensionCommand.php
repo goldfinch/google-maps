@@ -17,5 +17,5 @@ class MapsAdminExtensionCommand extends GeneratorCommand
 
     protected $stub = './stubs/mapsadmin-extension.stub';
 
-    protected $prefix = 'Extension';
+    protected $suffix = 'Extension';
 }

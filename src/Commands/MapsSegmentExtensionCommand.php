@@ -17,5 +17,5 @@ class MapsSegmentExtensionCommand extends GeneratorCommand
 
     protected $stub = './stubs/mapsegment-extension.stub';
 
-    protected $prefix = 'Extension';
+    protected $suffix = 'Extension';
 }

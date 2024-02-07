@@ -17,5 +17,5 @@ class MapConfigExtensionCommand extends GeneratorCommand
 
     protected $stub = './stubs/mapconfig-extension.stub';
 
-    protected $prefix = 'Extension';
+    protected $suffix = 'Extension';
 }

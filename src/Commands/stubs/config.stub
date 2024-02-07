@@ -19,4 +19,3 @@ Goldfinch\GoogleMaps\Blocks\MapBlock:
 Goldfinch\GoogleMaps\Models\MapSegment:
   extensions:
     - {{ namespace_root_extensions }}MapSegmentExtension
-  segment_types:

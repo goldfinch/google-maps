@@ -2,9 +2,7 @@
 
 namespace Goldfinch\GoogleMaps\Commands;
 
-use Symfony\Component\Finder\Finder;
 use Goldfinch\Taz\Services\Templater;
-use Goldfinch\Taz\Services\InputOutput;
 use Goldfinch\Taz\Console\GeneratorCommand;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Command\Command;
@@ -21,26 +19,11 @@ class MakeMapSegmentCommand extends GeneratorCommand
 
     protected function execute($input, $output): int
     {
-        $io = new InputOutput($input, $output);
+        $segmentName = $this->askClassNameQuestion('Name of the segment (eg: Branch, Office)', $input, $output);
 
-        $segmentName = $io->question('Name of the segment (lowercase, dash, A-z0-9)', null, function ($answer) use ($io) {
-
-            if (!is_string($answer) || $answer === null) {
-                throw new \RuntimeException(
-                    'Invalid name'
-                );
-            } else if (strlen($answer) < 2) {
-                throw new \RuntimeException(
-                    'Too short name'
-                );
-            } else if(!preg_match('/^([A-z0-9\-]+)$/', $answer)) {
-                throw new \RuntimeException(
-                    'Name can contains letter, numbers and dash'
-                );
-            }
-
-            return $answer;
-        });
+        if (!$segmentName) {
+            return Command::FAILURE;
+        }
 
         $segmentName = strtolower($segmentName);
 
@@ -61,55 +44,36 @@ class MakeMapSegmentCommand extends GeneratorCommand
             'themes/'.$theme.'/templates/Components/Maps/'.$segmentName.'.ss',
         );
 
-        if (!$this->setSegmentInConfig($segmentName)) {
-            // create config
+        // find config
+        $config = $this->findYamlConfigFileByName('app-google-maps');
 
-            $command = $this->getApplication()->find('vendor:google-maps:config');
+        // create new config if not exists
+        if (!$config) {
 
-            $arguments = [
+            $command = $this->getApplication()->find('make:config');
+            $command->run(new ArrayInput([
                 'name' => 'google-maps',
-            ];
+                '--plain' => true,
+                '--after' => 'goldfinch/google-maps',
+                '--namesuffix' => 'app-',
+            ]), $output);
 
-            $greetInput = new ArrayInput($arguments);
-            $returnCode = $command->run($greetInput, $output);
-
-            $this->setSegmentInConfig($segmentName);
+            $config = $this->findYamlConfigFileByName('app-google-maps');
         }
 
-        $io->right('Map segment has been added');
+        $ucfirst = ucfirst($segmentName);
+
+        // update config
+        $this->updateYamlConfig(
+            $config,
+            'Goldfinch\GoogleMaps\Models\MapSegment' . '.segment_types.' . $segmentName,
+            [
+                'label' => $ucfirst . ' map',
+                'settings' => true,
+                'markers' => true
+            ],
+        );
 
         return Command::SUCCESS;
-    }
-
-    private function setSegmentInConfig($segmentName)
-    {
-        $rewritten = false;
-
-        $finder = new Finder();
-        $files = $finder->in(BASE_PATH . '/app/_config')->files()->contains('Goldfinch\GoogleMaps\Models\MapSegment');
-
-        foreach ($files as $file) {
-
-            // stop after first replacement
-            if ($rewritten) {
-                break;
-            }
-
-            if (strpos($file->getContents(), 'segment_types') !== false) {
-
-                $ucfirst = ucfirst($segmentName);
-
-                $newContent = $this->addToLine(
-                    $file->getPathname(),
-                    'segment_types:','    '.$segmentName.':'.PHP_EOL.'      label: "'.$ucfirst.' map"'.PHP_EOL.'      settings: true'.PHP_EOL.'      markers: true',
-                );
-
-                file_put_contents($file->getPathname(), $newContent);
-
-                $rewritten = true;
-            }
-        }
-
-        return $rewritten;
     }
 }
