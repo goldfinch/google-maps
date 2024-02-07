@@ -3,7 +3,6 @@
 namespace Goldfinch\GoogleMaps\Commands;
 
 use Goldfinch\Taz\Console\GeneratorCommand;
-use Symfony\Component\Console\Command\Command;
 
 #[AsCommand(name: 'make:map-infowindow:template')]
 class MakeInfoWindowTemplateCommand extends GeneratorCommand
@@ -19,11 +18,4 @@ class MakeInfoWindowTemplateCommand extends GeneratorCommand
     protected $stub = 'infowindow-template.stub';
 
     protected $extension = '.ss';
-
-    protected function execute($input, $output): int
-    {
-        parent::execute($input, $output);
-
-        return Command::SUCCESS;
-    }
 }

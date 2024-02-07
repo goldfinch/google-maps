@@ -3,7 +3,6 @@
 namespace Goldfinch\GoogleMaps\Commands;
 
 use Goldfinch\Taz\Console\GeneratorCommand;
-use Symfony\Component\Console\Command\Command;
 
 #[AsCommand(name: 'vendor:google-maps:ext:block')]
 class MapBlockExtensionCommand extends GeneratorCommand
@@ -19,11 +18,4 @@ class MapBlockExtensionCommand extends GeneratorCommand
     protected $stub = './stubs/mapblock-extension.stub';
 
     protected $prefix = 'Extension';
-
-    protected function execute($input, $output): int
-    {
-        parent::execute($input, $output);
-
-        return Command::SUCCESS;
-    }
 }

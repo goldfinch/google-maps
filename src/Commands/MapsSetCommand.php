@@ -17,37 +17,23 @@ class MapsSetCommand extends GeneratorCommand
 
     protected function execute($input, $output): int
     {
-        $command = $this->getApplication()->find(
-            'vendor:google-maps:ext:admin',
-        );
-        $input = new ArrayInput(['name' => 'MapsAdmin']);
-        $command->run($input, $output);
+        $command = $this->getApplication()->find('vendor:google-maps:ext:admin');
+        $command->run(new ArrayInput(['name' => 'MapsAdmin']), $output);
 
-        $command = $this->getApplication()->find(
-            'vendor:google-maps:ext:config',
-        );
-        $input = new ArrayInput(['name' => 'MapConfig']);
-        $command->run($input, $output);
+        $command = $this->getApplication()->find('vendor:google-maps:ext:config');
+        $command->run(new ArrayInput(['name' => 'MapConfig']), $output);
 
-        $command = $this->getApplication()->find(
-            'vendor:google-maps:ext:block',
-        );
-        $input = new ArrayInput(['name' => 'MapBlock']);
-        $command->run($input, $output);
+        $command = $this->getApplication()->find('vendor:google-maps:ext:block');
+        $command->run(new ArrayInput(['name' => 'MapBlock']), $output);
 
-        $command = $this->getApplication()->find(
-            'vendor:google-maps:ext:segment',
-        );
-        $input = new ArrayInput(['name' => 'MapSegment']);
-        $command->run($input, $output);
+        $command = $this->getApplication()->find('vendor:google-maps:ext:segment');
+        $command->run(new ArrayInput(['name' => 'MapSegment']), $output);
 
         $command = $this->getApplication()->find('vendor:google-maps:config');
-        $input = new ArrayInput(['name' => 'google-maps']);
-        $command->run($input, $output);
+        $command->run(new ArrayInput(['name' => 'google-maps']), $output);
 
         $command = $this->getApplication()->find('vendor:google-maps:templates');
-        $input = new ArrayInput([]);
-        $command->run($input, $output);
+        $command->run(new ArrayInput([]), $output);
 
         return Command::SUCCESS;
     }
