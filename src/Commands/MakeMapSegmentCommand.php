@@ -55,7 +55,7 @@ class MakeMapSegmentCommand extends GeneratorCommand
                 'name' => 'google-maps',
                 '--plain' => true,
                 '--after' => 'goldfinch/google-maps',
-                '--namesuffix' => 'app-',
+                '--nameprefix' => 'app-',
             ]), $output);
 
             $config = $this->findYamlConfigFileByName('app-google-maps');
