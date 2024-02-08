@@ -14,7 +14,7 @@ APP_GOOGLE_MAPS_KEY=""
 
 InfoWindow template
 
-```
+```bash
 php taz make:map-infowindow:template
 ```
 
