@@ -1,8 +1,16 @@
 {
     "name": "goldfinch/google-maps",
-    "description": "",
+    "description": "The module helps to create and manage Google Maps in your Silverstripe project",
     "type": "silverstripe-vendormodule",
-    "keywords": ["silverstripe"],
+    "keywords": [
+        "silverstripe",
+        "google-maps",
+        "silverstripe-google-maps",
+        "map-events",
+        "marker-events",
+        "advancedmarkerelement-events",
+        "info-window-events"
+    ],
     "license": "MIT",
     "authors": [
         {
