@@ -6,7 +6,7 @@ Goldfinch\GoogleMaps\Admin\MapsAdmin:
     - Goldfinch\Helpers\Extensions\BlocksAdminExtension
 Goldfinch\GoogleMaps\Blocks\MapBlock:
   extensions:
-    - Goldfinch\Helpers\Extensions\BlocksAdminExtension
+    - Goldfinch\Helpers\Extensions\BaseElementExtension
 ---
 Name: goldfinch-google-maps-icon
 Only:
