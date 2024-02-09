@@ -13,7 +13,7 @@ class MapBlock extends BaseElement
     private static $plural_name = 'Map';
 
     private static $inline_editable = false;
-    private static $description = '';
+    private static $description = 'Google Maps block handler';
     private static $icon = 'font-icon-p-map';
 
     private static $has_one = [

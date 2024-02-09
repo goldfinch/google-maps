@@ -4,6 +4,7 @@ Name: goldfinch-google-maps
 Goldfinch\GoogleMaps\Admin\MapsAdmin:
   extensions:
     - Goldfinch\Helpers\Extensions\BlocksAdminExtension
+
 Goldfinch\GoogleMaps\Blocks\MapBlock:
   extensions:
     - Goldfinch\Helpers\Extensions\BaseElementExtension
