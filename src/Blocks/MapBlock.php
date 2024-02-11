@@ -2,12 +2,15 @@
 
 namespace Goldfinch\GoogleMaps\Blocks;
 
-use Goldfinch\Blocks\Models\BlockElement;
+use DNADesign\Elemental\Models\BaseElement;
 use Goldfinch\GoogleMaps\Models\MapSegment;
 use SilverShop\HasOneField\HasOneButtonField;
+use Goldfinch\Helpers\Traits\BaseElementTrait;
 
-class MapBlock extends BlockElement
+class MapBlock extends BaseElement
 {
+    use BaseElementTrait;
+
     private static $table_name = 'MapBlock';
     private static $singular_name = 'Map';
     private static $plural_name = 'Map';

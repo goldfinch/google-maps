@@ -20,7 +20,7 @@ composer require goldfinch/google-maps
 There are two **API Libraries** that need to be enabled for the proper work of this module. 
 
 - [Maps JavaScript API](https://console.cloud.google.com/apis/library/maps-backend.googleapis.com) for maps integration
-- [Maps Static API](https://console.cloud.google.com/apis/library/static-maps-backend.googleapis.com) for maps thumbnails
+- [Maps Static API](https://console.cloud.google.com/apis/library/static-maps-backend.googleapis.com) for maps thumbnails and previews
 
 #### 3. Add Google Cloud API key to your **.env**
 
@@ -28,70 +28,7 @@ There are two **API Libraries** that need to be enabled for the proper work of t
 APP_GOOGLE_MAPS_KEY=""
 ```
 
-## Available Taz commands
-
-If you haven't used [**Taz**](https://github.com/goldfinch/taz)🌪️ before, *taz* file must be presented in your root project folder `cp vendor/goldfinch/taz/taz taz`
-
----
-
-> Create map segment
-```bash
-php taz make:map-segment
-```
-
-> Create InfoWindow template
-```bash
-php taz make:map-infowindow:template
-```
-
-> Create MapBlock extension
-```bash
-php taz vendor:google-maps:ext:block
-```
-
-> Create Config extension
-```bash
-php taz vendor:google-maps:ext:config
-```
-
-> Create MapsAdmin extension
-```bash
-php taz vendor:google-maps:ext:admin
-```
-
-> Create MapSegment extension
-```bash
-php taz vendor:google-maps:ext:segment
-```
-
-> Create full Yaml config (further config amends is required, you might want to remove what you don't need)
-```bash
-php taz vendor:google-maps:config
-```
-
-> Publish all available templates
-```bash
-php taz vendor:google-maps:templates
-```
-
-> Runs a bundle of all available `vendor:google-maps:*` commands
-```bash
-php taz vendor:google-maps
-```
-
-## How to create a new map
-
-Each **Google Map** is build on what is called **Map Segment**.
-
-#### 1. Create a map segment
-
-Use [**Taz**](https://github.com/goldfinch/taz)🌪️ to generate new Map Segment. It will quickly lead you through the setup and take care of it for you.
-
-```bash
-php taz make:map-segment
-```
-
-#### 2. Implement JavaScript front-end component
+#### 4. Implement JavaScript front-end component
 
 *via Silverstripe Requirements PHP*
 
@@ -144,10 +81,112 @@ export default defineConfig(({ command, mode }) => {
 });
 ```
 
+## Available Taz commands
+
+If you haven't used [**Taz**](https://github.com/goldfinch/taz)🌪️ before, *taz* file must be presented in your root project folder `cp vendor/goldfinch/taz/taz taz`
+
+---
+
+> Create map segment
+```bash
+php taz make:map-segment
+```
+
+> Create InfoWindow template
+```bash
+php taz make:map-infowindow:template
+```
+
+> Create MapBlock extension
+```bash
+php taz vendor:google-maps:ext:block
+```
+
+> Create Config extension
+```bash
+php taz vendor:google-maps:ext:config
+```
+
+> Create MapsAdmin extension
+```bash
+php taz vendor:google-maps:ext:admin
+```
+
+> Create MapSegment extension
+```bash
+php taz vendor:google-maps:ext:segment
+```
+
+> Create full Yaml config (further config amends are required, you might want to remove what you don't need)
+```bash
+php taz vendor:google-maps:config
+```
+
+> Publish all available templates
+```bash
+php taz vendor:google-maps:templates
+```
+
+> Runs a bundle of all available `vendor:google-maps:*` commands
+```bash
+php taz vendor:google-maps
+```
+
+## How to create a new map
+
+Each **Google Map** is built on what is called **Map Segment**.
+
+#### 1. Create a map segment
+
+Use [**Taz**](https://github.com/goldfinch/taz)🌪️ to generate new Map Segment. It will quickly lead you through the setup and take care of it for you.
+
+```bash
+php taz make:map-segment
+```
+
+#### 2. Create map record in CMS
+
+Go to `/admin/maps` and add new map. In the **Type** we need to select our map segment that has been created the step before (should be selected by default). You can go ahead, add markers and check out the *Settings* tab if you want.
+
+#### 3. Custom Info Window template (optional)
+
+This module comes with various settings for Maps and Markers. You can also add Info Window for markers and easily customize it for your needs. All you need to do is create your custom InfoWindow template by using **Taz**
+
+```bash
+php taz make:map-infowindow:template
+```
+
+Once it's been created, you can go to any marker record you added to your map and select your custom template in **Info Window Template** dropdown.
+
 ## Usage
 
-..
+#### Across templates
 
+Using **GoogleMaps** global provider.
+
+> Render map segment template by type
+```html
+$GoogleMaps.bySegment(office).RenderSegmentMap
+```
+
+> Render map frame only by type
+```html
+$GoogleMaps.bySegment(office).MapElement
+```
+
+> Render map segment template by ID
+```html
+$GoogleMaps.byID(1).RenderSegmentMap
+```
+
+> Render map frame only by ID
+```html
+$GoogleMaps.byID(1).MapElement
+```
+
+#### Using elemental block
+
+If you prefer using [silverstripe/silverstripe-elemental](https://github.com/silverstripe/silverstripe-elemental), you can take a look at **Map** block that already comes with this module.
 
 ## Sidenotes
 

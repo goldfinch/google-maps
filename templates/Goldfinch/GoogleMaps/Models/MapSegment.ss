@@ -1,14 +1,14 @@
 $MapElement
 
+<%-- The below data is for your information. Feel free to remove everything and make your own changes --%>
 <div class="container">
   <div class="row justify-content-center my-5">
     <div class="col-md-8">
-      <h2>Map segment</h2>
       <hr />
-      <p>To overwrite this template, create individual file in your theme</p>
-      <div class="mb-3"><code>/templates/Components/Maps/{$Type}.ss</code></div>
-      <div class="mb-2"><strong>ID:</strong> $ID</div>
-      <div class="mb-2"><strong>Type:</strong> $Type</div>
+      <p>This is a custom template for <strong>$Type</strong> segment type.</p>
+      <div class="mb-3"><strong>Template:</strong> <code>/templates/Components/Maps/{$Type}.ss</code></div>
+      <div class="mb-2"><strong>Segment ID:</strong> $ID</div>
+      <div class="mb-2"><strong>Segment Type:</strong> $Type</div>
       <%--
       <div class="mb-2"><strong>Parameters (json):</strong> $Parameters</div>
       --%>

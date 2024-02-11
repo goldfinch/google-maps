@@ -122,7 +122,7 @@ class MapMarker extends DataObject
                 'Info Window Template',
                 $infoWindowTemplates,
             )->setDescription(
-                'Info Window option in Settings needs  to be enabled for this to work.<br>Place your template in `/themes/{theme}/templates/Components/Maps/InfoWindows/you_template_name.ss`',
+                'The <strong>Info Window</strong> option in Settings needs  to be enabled for this to work.<br>Use Taz command to create a new template: <i>php taz make:map-infowindow:template</i>',
             ),
             MapField::create('Map'),
         ];
@@ -151,5 +151,14 @@ class MapMarker extends DataObject
         }
 
         return $fields;
+    }
+
+    public function onBeforeWrite()
+    {
+        parent::onBeforeWrite();
+
+        if (!$this->Parameters) {
+            $this->Parameters = '{"marker_type":{"markerType":"Marker","markerScaleWidth":"","markerScaleHeight":"","markerAnchorX":"","markerAnchorY":"","markerAnimation":"","markerFont":false,"markerFontFamily":"","markerFontCode":"","markerFontColor":"","markerFontSize":""},"info_window":{"infoWindow":false}}';
+        }
     }
 }

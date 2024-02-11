@@ -315,6 +315,8 @@ class MapSegment extends DataObject
 
     public function onBeforeWrite()
     {
+        parent::onBeforeWrite();
+
         $changed = $this->getChangedFields();
 
         if (isset($changed['Type'])) {
@@ -323,7 +325,9 @@ class MapSegment extends DataObject
             }
         }
 
-        parent::onBeforeWrite();
+        if (!$this->Parameters) {
+            $this->Parameters = '{"map_dynamic":{"enabled":false},"map_theme":{"theme":""},"map_inset_overview":false,"map_height":"400","mapId":"","mapTypeId":"roadmap","backgroundColor":"#ffffff","disableDoubleClickZoom":false,"clickableIcons":true,"zoomControl":true,"mapTypeControl":true,"scaleControl":false,"streetViewControl":true,"rotateControl":false,"fullscreenControl":true,"scrollwheel":"","isFractionalZoomEnabled":false,"keyboardShortcuts":true,"draggable":true,"noClear":false,"maxZoom":"","minZoom":"","controlSize":"","draggableCursor":"","draggingCursor":"","gestureHandling":"auto","heading":""}';
+        }
     }
 
     public function MarkersData()
