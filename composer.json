@@ -24,8 +24,8 @@
         "silverstripe/admin": "^2.0",
         "goldfinch/google-fields": "^1.0",
         "goldfinch/json-editor": "^1.0",
-        "goldfinch/helpers": "^1.0",
-        "goldfinch/taz": "^1.0",
+        "goldfinch/helpers": "^2.0",
+        "goldfinch/taz": "^2.0",
         "jonom/silverstripe-someconfig": "^1.0",
         "silvershop/silverstripe-hasonefield": "dev-main",
         "dnadesign/silverstripe-elemental": "^5.0"
