@@ -3,16 +3,11 @@
 namespace Goldfinch\GoogleMaps\Models;
 
 use SilverStripe\ORM\DataObject;
-use SilverStripe\Forms\TextField;
 use SilverStripe\Core\Environment;
-use SilverStripe\Forms\CheckboxField;
-use SilverStripe\Forms\DropdownField;
 use Goldfinch\GoogleMaps\Blocks\MapBlock;
 use SilverStripe\ORM\FieldType\DBHTMLText;
-use Goldfinch\GoogleFields\Forms\MapField;
 use Goldfinch\GoogleMaps\Models\MapMarker;
 use SilverStripe\Forms\GridField\GridField;
-use Goldfinch\JSONEditor\Forms\JSONEditorField;
 use Goldfinch\JSONEditor\ORM\FieldType\DBJSONText;
 use SilverStripe\Forms\GridField\GridFieldDataColumns;
 use SilverStripe\Forms\GridField\GridFieldPrintButton;
@@ -227,12 +222,16 @@ class MapSegment extends DataObject
 
     public function getCMSFields()
     {
-        $fields = parent::getCMSFields();
+        $fields = parent::getCMSFields()->initFielder($this);
 
-        $fields->removeByName(['Title', 'Type', 'Disabled', 'Parameters']);
+        $fielder = $fields->getFielder();
+
+        $fielder->required(['Title', 'Type']);
+
+        $fielder->remove(['Title', 'Type', 'Disabled', 'Parameters']);
 
         if ($this->getSegmentTypeConfig('markers')) {
-            $markersGrid = $fields->dataFieldByName('Markers');
+            $markersGrid = $fielder->dataField('Markers');
             $markersGrid
                 ->getConfig()
                 ->removeComponentsByType(GridFieldDeleteAction::class)
@@ -246,21 +245,26 @@ class MapSegment extends DataObject
                     // ->addComponent(GridFieldConfigurablePaginator::create())
                 );
         } else {
-            $fields->removeByName('Markers');
+            $fielder->remove('Markers');
         }
 
-        $typesOptions = $this->getSegmentListOfTypes();
+        $typesOptions = $this->getSegmentListOfTypes() ?? [];
 
         $mainFields = [
-            TextField::create('Title', 'Title'),
-            CheckboxField::create('Disabled', 'Disabled')->setDescription(
+            $fielder->string('Title'),
+            $fielder->checkbox('Disabled')->setDescription(
                 'hide this map across the website',
             ),
-            DropdownField::create('Type', 'Type', $typesOptions ?? []),
-            MapField::create('Map'),
+            $fielder->map('Map'),
         ];
 
-        $fields->addFieldsToTab('Root.Main', $mainFields);
+        $fielder->toTab('Root.Main', $mainFields);
+
+        if (empty($typesOptions)) {
+            $fielder->addError('You need to create and register map segment first, please run <strong>php taz make:map-segment</strong>', 'warning');
+        } else {
+            $fielder->insertAfter('Disabled', $fielder->dropdown('Type', 'Type', $typesOptions));
+        }
 
         if ($this->ID && $this->Type) {
             $schemaParamsPath =
@@ -271,11 +275,10 @@ class MapSegment extends DataObject
             if (file_exists($schemaParamsPath)) {
                 $schemaParams = file_get_contents($schemaParamsPath);
 
-                $fields->addFieldsToTab('Root.Settings', [
-                    JSONEditorField::create(
+                $fielder->toTab('Root.Settings', [
+                    $fielder->json(
                         'Parameters',
-                        'Parameters',
-                        $this,
+                        null,
                         [],
                         '{}',
                         null,
@@ -286,7 +289,7 @@ class MapSegment extends DataObject
         }
 
         if ($this->ID) {
-            $fields->addFieldsToTab('Root.Markers', [
+            $fielder->toTab('Root.Markers', [
                 GridField::create(
                     'Markers',
                     'Markers',
