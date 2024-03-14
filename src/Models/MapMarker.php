@@ -83,7 +83,9 @@ class MapMarker extends DataObject
 
     public function getCMSFields()
     {
-        $fields = parent::getCMSFields();
+        $fields = parent::getCMSFields()->initFielder($this);
+
+        $fielder = $fields->getFielder();
 
         $fields = $fields->makeReadonly();
 
