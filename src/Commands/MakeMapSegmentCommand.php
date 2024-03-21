@@ -40,7 +40,7 @@ class MakeMapSegmentCommand extends GeneratorCommand
 
         $fs->copy(
             BASE_PATH .
-                '/vendor/goldfinch/google-maps/components/segment.ss',
+                '/vendor/goldfinch/google-maps/templates/Goldfinch/GoogleMaps/Models/MapSegment.ss',
             'themes/'.$theme.'/templates/Components/Maps/'.$segmentName.'.ss',
         );
 

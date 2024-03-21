@@ -4,9 +4,10 @@ namespace Goldfinch\GoogleMaps\Models;
 
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Core\Environment;
+use SilverStripe\SiteConfig\SiteConfig;
 use Goldfinch\GoogleMaps\Blocks\MapBlock;
-use SilverStripe\ORM\FieldType\DBHTMLText;
 use Goldfinch\GoogleMaps\Models\MapMarker;
+use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\Forms\GridField\GridField;
 use Goldfinch\JSONEditor\ORM\FieldType\DBJSONText;
 use SilverStripe\Forms\GridField\GridFieldDataColumns;
@@ -378,8 +379,19 @@ class MapSegment extends DataObject
             }
         }
 
+        if (Environment::hasEnv('APP_GOOGLE_MAPS_KEY')) {
+            $key = Environment::getEnv('APP_GOOGLE_MAPS_KEY');
+        } else {
+            $cfg = SiteConfig::current_site_config();
+            if ($cfg->GoogleCloud && $cfg->GoogleCloudAPIKey) {
+                $key = $cfg->GoogleCloudAPIKey;
+            } else {
+                $key = '';
+            }
+        }
+
         $data = [
-            'Key' => Environment::getEnv('APP_GOOGLE_MAPS_KEY'),
+            'Key' => $key,
             'Latitude' => (float) $this->Map->Latitude,
             'Longitude' => (float) $this->Map->Longitude,
             'Zoom' => (float) $this->Map->Zoom,
