@@ -152,6 +152,8 @@ class MapMarker extends DataObject
             }
         }
 
+        $this->extend('updateCMSFields', $fields);
+
         return $fields;
     }
 

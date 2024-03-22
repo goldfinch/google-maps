@@ -35,6 +35,8 @@ class MapBlock extends BaseElement
             HasOneButtonField::create($this, 'Segment'),
         ]);
 
+        $this->extend('updateCMSFields', $fields);
+
         return $fields;
     }
 }

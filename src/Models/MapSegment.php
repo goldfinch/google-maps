@@ -314,6 +314,8 @@ class MapSegment extends DataObject
             $fields->addFieldsToTab('Root.Settings', []);
         }
 
+        $this->extend('updateCMSFields', $fields);
+
         return $fields;
     }
 
