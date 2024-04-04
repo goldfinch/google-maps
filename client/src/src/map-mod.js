@@ -1,10 +1,42 @@
 import { Loader } from '@googlemaps/js-api-loader';
 
 class GoogleMap {
+
+  loadedSegments = [];
+
   constructor() {
+
+    window.addEventListener('resize', () => this.preLoading())
+    document.addEventListener('scroll', () => this.preLoading())
+
+  }
+
+  preLoading() {
+
     document.querySelectorAll('[data-map-segment]').forEach((e, i) => {
-      this.initSegment(e);
-    });
+
+      let k = this.loadedSegments.map(seg => seg.id).indexOf(i)
+
+      if (k < 0 && this.isVisible(e)) {
+        this.loadedSegments.push({
+          id: i,
+          el: e,
+        })
+
+        this.initSegment(e)
+      }
+    })
+
+  }
+
+  isVisible (el) {
+    const { top, bottom } = el.getBoundingClientRect();
+    const vHeight = (window.innerHeight || document.documentElement.clientHeight);
+
+    return (
+      (top > 0 || bottom > 0) &&
+      top < vHeight
+    );
   }
 
   initSegment(mapElement) {
