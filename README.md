@@ -50,7 +50,7 @@ npm i @googlemaps/js-api-loader
 
 ```js
 import GoogleMap from '..../vendor/goldfinch/google-maps/client/src/src/map-mod';
-// import GoogleMap from '@goldfinch/google-maps/src/map-mod'; // with alias
+// import GoogleMap from '@goldfinch/google-maps/client/src/src/map-mod'; // with alias
 
 document.addEventListener('DOMContentLoaded', () => {
   new GoogleMap();
