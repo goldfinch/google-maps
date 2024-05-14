@@ -6,24 +6,29 @@ class GoogleMap {
 
   constructor() {
 
-    window.addEventListener('resize', () => this.preLoading())
-    document.addEventListener('scroll', () => this.preLoading())
+    this.preLoading()
+    window.addEventListener('resize', () => this.preLoading('resize'))
+    document.addEventListener('scroll', () => this.preLoading('scroll'))
+    document.addEventListener('click', () => this.preLoading('scroll'))
 
   }
 
-  preLoading() {
+  preLoading(type) {
 
     document.querySelectorAll('[data-map-segment]').forEach((e, i) => {
 
       let k = this.loadedSegments.map(seg => seg.id).indexOf(i)
 
-      if (k < 0 && this.isVisible(e)) {
-        this.loadedSegments.push({
-          id: i,
-          el: e,
-        })
+      if (type !== undefined || (type === undefined && e.getAttribute('data-lazy-loading') === '1')) {
 
-        this.initSegment(e)
+        if (k < 0 && this.isVisible(e)) {
+          this.loadedSegments.push({
+            id: i,
+            el: e,
+          })
+
+          this.initSegment(e)
+        }
       }
     })
 

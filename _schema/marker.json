@@ -14,7 +14,7 @@
                     "type": "string",
                     "format": "select",
                     "default": "",
-                    "description": "* Advanced Marker requiers Map ID set up in the map settings",
+                    "description": "As of February 21st, 2024, `Marker` is deprecated. Please use AdvancedMarkerElement instead. * Advanced Marker requiers Map ID set up in the map settings",
                     "options": {
                         "enum_titles": ["Marker", "Advanced Marker"]
                     },
@@ -306,6 +306,7 @@
                 },
                 "infoWindowMaxWidth": {
                     "title": "Info Window Max width",
+                    "description": "eg: 500",
                     "type": "string",
                     "default": "",
                     "options": {
@@ -316,6 +317,7 @@
                 },
                 "infoWindowMinWidth": {
                     "title": "Info Window Min width",
+                    "description": "eg: 500",
                     "type": "string",
                     "default": "",
                     "options": {

@@ -55,15 +55,7 @@ class MapMarker extends DataObject
             return null;
         }
 
-        // ! important check: this mthod will be called within the admin for summary_fields data, therefore `renderWith` will through an error. To avoid this, the check below determins the raugh difference between the admin and the frontend call.
-        if (
-            array_key_exists('', $this->sourceQueryParams) &&
-            $this->sourceQueryParams[''] == null
-        ) {
-            return null;
-        }
-
-        return $this->renderWith($path);
+        return $this->renderWith([$path, 'Goldfinch/GoogleMaps/Models/MapSegment']);
     }
 
     public function MapThumbnail()

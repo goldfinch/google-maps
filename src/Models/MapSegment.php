@@ -31,6 +31,7 @@ class MapSegment extends DataObject
         'Type' => 'Varchar',
         'Disabled' => 'Boolean',
         'Map' => 'Map',
+        'LazyLoading' => 'Boolean',
 
         'Parameters' => DBJSONText::class,
     ];
@@ -137,6 +138,7 @@ class MapSegment extends DataObject
           data-map-segment="' .
             $this->ID .
             '"
+          data-lazy-loading=\'' . $this->LazyLoading . '\'
           data-segment=\'' .
             $this->SegmentData() .
             '\'
@@ -257,6 +259,7 @@ class MapSegment extends DataObject
                 'hide this map across the website',
             ),
             $fielder->map('Map'),
+            $fielder->checkbox('LazyLoading')->setDescription('Loads map only on first user action (scroll, click or window resizing). Improves site speed performance')
         ];
 
         $fielder->toTab('Root.Main', $mainFields);
