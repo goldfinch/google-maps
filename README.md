@@ -223,6 +223,21 @@ window.goldfinch.infoWindow_callback = (infoWindow, infowindowParams, marker, ma
 }
 ```
 
+## Previews
+
+#### Admin
+![Map admin](screenshots/map-admin.png)
+#### Map segment
+![Map segment](screenshots/map-segment.png)
+#### Map segment settings
+![Map segment settings](screenshots/map-settings.png)
+#### Map's markers
+![Map markers](screenshots/map-markers.png)
+#### Marker item
+![Marker item](screenshots/marker-item.png)
+#### Marker settings
+![Marker settings](screenshots/marker-settings.png)
+
 ## License
 
 The MIT License (MIT)
