@@ -2,20 +2,21 @@
 
 namespace Goldfinch\GoogleMaps\Admin;
 
-use SilverStripe\Admin\ModelAdmin;
-use JonoM\SomeConfig\SomeConfigAdmin;
 use Goldfinch\GoogleMaps\Blocks\MapBlock;
-use Goldfinch\GoogleMaps\Models\MapMarker;
 use Goldfinch\GoogleMaps\Configs\MapConfig;
+use Goldfinch\GoogleMaps\Models\MapMarker;
 use Goldfinch\GoogleMaps\Models\MapSegment;
-use SilverStripe\Forms\GridField\GridFieldConfig;
+use JonoM\SomeConfig\SomeConfigAdmin;
+use SilverStripe\Admin\ModelAdmin;
 
 class MapsAdmin extends ModelAdmin
 {
     use SomeConfigAdmin;
 
     private static $url_segment = 'maps';
+
     private static $menu_title = 'Maps';
+
     private static $menu_icon_class = 'font-icon-p-map';
     // private static $menu_priority = -0.5;
 
@@ -40,7 +41,7 @@ class MapsAdmin extends ModelAdmin
 
         $cfg = MapConfig::current_config();
 
-        if (!class_exists('DNADesign\Elemental\Models\BaseElement')) {
+        if (! class_exists('DNADesign\Elemental\Models\BaseElement')) {
             unset($models[MapBlock::class]);
         }
 

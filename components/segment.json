@@ -8,7 +8,7 @@
                 "title": "Example",
                 "type": "string",
                 "default": "default example text"
-              }
+            }
         }
     }
 }

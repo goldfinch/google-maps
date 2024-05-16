@@ -2,28 +2,29 @@
 
 namespace Goldfinch\GoogleMaps\Models;
 
-use SilverStripe\ORM\DataObject;
-use SilverStripe\Core\Environment;
-use SilverStripe\SiteConfig\SiteConfig;
 use Goldfinch\GoogleMaps\Blocks\MapBlock;
-use Goldfinch\GoogleMaps\Models\MapMarker;
-use SilverStripe\ORM\FieldType\DBHTMLText;
-use SilverStripe\Forms\GridField\GridField;
+use Goldfinch\Helpers\Forms\GridField\GridFieldManyManyConfig;
 use Goldfinch\JSONEditor\ORM\FieldType\DBJSONText;
-use SilverStripe\Forms\GridField\GridFieldDataColumns;
-use SilverStripe\Forms\GridField\GridFieldPrintButton;
+use SilverStripe\Core\Environment;
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
 use SilverStripe\Forms\GridField\GridFieldAddNewButton;
+use SilverStripe\Forms\GridField\GridFieldDataColumns;
 use SilverStripe\Forms\GridField\GridFieldDeleteAction;
 use SilverStripe\Forms\GridField\GridFieldExportButton;
 use SilverStripe\Forms\GridField\GridFieldImportButton;
-use Goldfinch\Helpers\Forms\GridField\GridFieldManyManyConfig;
+use SilverStripe\Forms\GridField\GridFieldPrintButton;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\FieldType\DBHTMLText;
+use SilverStripe\SiteConfig\SiteConfig;
 use Symbiote\GridFieldExtensions\GridFieldConfigurablePaginator;
-use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
 
 class MapSegment extends DataObject
 {
     private static $table_name = 'MapSegment';
+
     private static $singular_name = 'map';
+
     private static $plural_name = 'maps';
 
     private static $db = [
@@ -66,7 +67,7 @@ class MapSegment extends DataObject
             return;
         }
 
-        $partialFile = 'Components/Maps/' . $this->Type;
+        $partialFile = 'Components/Maps/'.$this->Type;
 
         if (ss_theme_template_file_exists($partialFile)) {
             return $this->Type ? $this->renderWith($partialFile) : null;
@@ -81,7 +82,7 @@ class MapSegment extends DataObject
     {
         $parameters = json_decode($this->Parameters ?? '{}');
 
-        if (!$parameters) {
+        if (! $parameters) {
             return;
         }
 
@@ -93,7 +94,7 @@ class MapSegment extends DataObject
             property_exists($parameters, 'map_height') &&
             $parameters->map_height
         ) {
-            $map_height = 'style="height: ' . $parameters->map_height . 'px"';
+            $map_height = 'style="height: '.$parameters->map_height.'px"';
         }
 
         if (
@@ -117,14 +118,14 @@ class MapSegment extends DataObject
         ) {
             $map_inset_overview =
                 '<div
-              style="display: ' .
-                ($map_dynamic_str == '' ? 'block' : 'none') .
+              style="display: '.
+                ($map_dynamic_str == '' ? 'block' : 'none').
                 '; position: absolute; left: 40px; height: 175px; width: 175px; bottom: 50px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);"
-              class="map-overview-' .
-                $this->Type .
+              class="map-overview-'.
+                $this->Type.
                 '"
-              data-map-overview="' .
-                $this->ID .
+              data-map-overview="'.
+                $this->ID.
                 '"
             ></div>
             ';
@@ -132,26 +133,26 @@ class MapSegment extends DataObject
 
         $html =
             '<div class="map-segment" style="position: relative"><div
-          class="map-segment-' .
-            $this->Type .
+          class="map-segment-'.
+            $this->Type.
             '"
-          data-map-segment="' .
-            $this->ID .
+          data-map-segment="'.
+            $this->ID.
             '"
-          data-lazy-loading=\'' . $this->LazyLoading . '\'
-          data-segment=\'' .
-            $this->SegmentData() .
+          data-lazy-loading=\''.$this->LazyLoading.'\'
+          data-segment=\''.
+            $this->SegmentData().
             '\'
-          data-parameters=\'' .
-            $this->Parameters .
+          data-parameters=\''.
+            $this->Parameters.
             '\'
-          ' .
-            $map_height .
+          '.
+            $map_height.
             '
-        >' .
-            $map_dynamic_str .
-            '</div>' .
-            $map_inset_overview .
+        >'.
+            $map_dynamic_str.
+            '</div>'.
+            $map_inset_overview.
             '</div>';
 
         $return = DBHTMLText::create();
@@ -172,7 +173,7 @@ class MapSegment extends DataObject
         );
 
         $html = DBHTMLText::create();
-        $html->setValue('<img src="' . $url . '" alt="Preview image"/>');
+        $html->setValue('<img src="'.$url.'" alt="Preview image"/>');
 
         return $html;
     }
@@ -259,7 +260,7 @@ class MapSegment extends DataObject
                 'hide this map across the website',
             ),
             $fielder->map('Map'),
-            $fielder->checkbox('LazyLoading')->setDescription('Loads map only on first user action (scroll, click or window resizing). Improves site speed performance')
+            $fielder->checkbox('LazyLoading')->setDescription('Loads map only on first user action (scroll, click or window resizing). Improves site speed performance'),
         ];
 
         $fielder->toTab('Root.Main', $mainFields);
@@ -272,8 +273,8 @@ class MapSegment extends DataObject
 
         if ($this->ID && $this->Type) {
             $schemaParamsPath =
-                BASE_PATH .
-                '/vendor/goldfinch/google-maps/_schema/' .
+                BASE_PATH.
+                '/vendor/goldfinch/google-maps/_schema/'.
                 'map.json';
 
             if (file_exists($schemaParamsPath)) {
@@ -334,7 +335,7 @@ class MapSegment extends DataObject
             }
         }
 
-        if (!$this->Parameters) {
+        if (! $this->Parameters) {
             $this->Parameters = '{"map_dynamic":{"enabled":false},"map_theme":{"theme":""},"map_inset_overview":false,"map_height":"400","mapId":"","mapTypeId":"roadmap","backgroundColor":"#ffffff","disableDoubleClickZoom":false,"clickableIcons":true,"zoomControl":true,"mapTypeControl":true,"scaleControl":false,"streetViewControl":true,"rotateControl":false,"fullscreenControl":true,"scrollwheel":"","isFractionalZoomEnabled":false,"keyboardShortcuts":true,"draggable":true,"noClear":false,"maxZoom":"","minZoom":"","controlSize":"","draggableCursor":"","draggingCursor":"","gestureHandling":"auto","heading":""}';
         }
     }
@@ -373,9 +374,9 @@ class MapSegment extends DataObject
                 $parameters->map_theme->theme != 'custom'
             ) {
                 $theme =
-                    BASE_PATH .
-                    '/vendor/goldfinch/google-maps/_schema/map-styles/' .
-                    $parameters->map_theme->theme .
+                    BASE_PATH.
+                    '/vendor/goldfinch/google-maps/_schema/map-styles/'.
+                    $parameters->map_theme->theme.
                     '.json';
 
                 if (file_exists($theme)) {

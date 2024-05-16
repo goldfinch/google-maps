@@ -65,25 +65,9 @@
                     "default": "",
                     "description": "styles apply only when there is no `Map ID` specified",
                     "format": "select",
-                    "enum": [
-                        "",
-                        "silver",
-                        "retro",
-                        "night",
-                        "dark",
-                        "aubergine",
-                        "custom"
-                    ],
+                    "enum": ["", "silver", "retro", "night", "dark", "aubergine", "custom"],
                     "options": {
-                        "enum_titles": [
-                            "-",
-                            "Silver",
-                            "Retro",
-                            "Night",
-                            "Dark",
-                            "Aubergine",
-                            "* Custom theme"
-                        ]
+                        "enum_titles": ["-", "Silver", "Retro", "Night", "Dark", "Aubergine", "* Custom theme"]
                     }
                 },
                 "styles": {
@@ -210,11 +194,7 @@
             "format": "select",
             "enum": ["", "true", "false"],
             "options": {
-                "enum_titles": [
-                    "Default (scroll with command key)",
-                    "Free scroll (not recommended)",
-                    "Disabled scroll"
-                ]
+                "enum_titles": ["Default (scroll with command key)", "Free scroll (not recommended)", "Disabled scroll"]
             }
         },
         "isFractionalZoomEnabled": {

@@ -1,7 +1,8 @@
 {
   "src/map.js": {
     "file": "map.js",
-    "isEntry": true,
-    "src": "src/map.js"
+    "name": "map",
+    "src": "src/map.js",
+    "isEntry": true
   }
 }

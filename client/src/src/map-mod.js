@@ -1,26 +1,20 @@
-import { Loader } from '@googlemaps/js-api-loader';
+import { Loader } from '@googlemaps/js-api-loader'
 
 class GoogleMap {
-
-  loadedSegments = [];
+  loadedSegments = []
 
   constructor() {
-
     this.preLoading()
     window.addEventListener('resize', () => this.preLoading('resize'))
     document.addEventListener('scroll', () => this.preLoading('scroll'))
     document.addEventListener('click', () => this.preLoading('scroll'))
-
   }
 
   preLoading(type) {
-
     document.querySelectorAll('[data-map-segment]').forEach((e, i) => {
-
       let k = this.loadedSegments.map(seg => seg.id).indexOf(i)
 
       if (type !== undefined || (type === undefined && e.getAttribute('data-lazy-loading') === '1')) {
-
         if (k < 0 && this.isVisible(e)) {
           this.loadedSegments.push({
             id: i,
@@ -31,28 +25,24 @@ class GoogleMap {
         }
       }
     })
-
   }
 
-  isVisible (el) {
-    const { top, bottom } = el.getBoundingClientRect();
-    const vHeight = (window.innerHeight || document.documentElement.clientHeight);
+  isVisible(el) {
+    const { top, bottom } = el.getBoundingClientRect()
+    const vHeight = window.innerHeight || document.documentElement.clientHeight
 
-    return (
-      (top > 0 || bottom > 0) &&
-      top < vHeight
-    );
+    return (top > 0 || bottom > 0) && top < vHeight
   }
 
   initSegment(mapElement) {
-    const segmentAttr = mapElement.getAttribute('data-segment');
-    const parametersAttr = mapElement.getAttribute('data-parameters');
+    const segmentAttr = mapElement.getAttribute('data-segment')
+    const parametersAttr = mapElement.getAttribute('data-parameters')
 
     if (!mapElement || !segmentAttr) {
-      return;
+      return
     }
 
-    const segment = JSON.parse(segmentAttr);
+    const segment = JSON.parse(segmentAttr)
 
     let mapSettings = {
       center: { lat: segment.Latitude, lng: segment.Longitude },
@@ -82,44 +72,45 @@ class GoogleMap {
       // mapTypeId: "roadmap",
       // mapTypeId: "satellite",
       // mapTypeId: "terrain",
-    };
+    }
 
     if (parametersAttr) {
-      var parameters = JSON.parse(parametersAttr);
+      var parameters = JSON.parse(parametersAttr)
     }
 
     if (typeof parameters !== 'undefined') {
-      const mapTheme = parameters.map_theme;
-      var mapDynamic = parameters.map_dynamic;
+      const mapTheme = parameters.map_theme
+      var mapDynamic = parameters.map_dynamic
 
-      var mapOverview = parameters.map_inset_overview;
+      var mapOverview = parameters.map_inset_overview
 
       // pseudo parameters
-      delete parameters.map_theme;
-      delete parameters.map_dynamic;
-      delete parameters.map_height;
-      delete parameters.map_inset_overview;
+      delete parameters.map_theme
+      delete parameters.map_dynamic
+      delete parameters.map_height
+      delete parameters.map_inset_overview
 
       if (parameters.mapTypeId === '-') {
-        delete parameters.mapTypeId;
+        delete parameters.mapTypeId
       }
 
       if (parameters.scrollwheel !== '') {
-        parameters.scrollwheel = JSON.parse(parameters.scrollwheel);
+        parameters.scrollwheel = JSON.parse(parameters.scrollwheel)
       }
 
       if (mapTheme.theme == 'custom' && mapTheme.styles) {
-        parameters.styles = JSON.parse(mapTheme.styles);
-      } else if (segment.Theme) {
-        parameters.styles = JSON.parse(segment.Theme);
+        parameters.styles = JSON.parse(mapTheme.styles)
+      }
+      else if (segment.Theme) {
+        parameters.styles = JSON.parse(segment.Theme)
       }
 
       // cleaner
       Object.keys(parameters).forEach((key, index) => {
         if (parameters[key] === '') {
-          delete parameters[key];
+          delete parameters[key]
         }
-      });
+      })
 
       // delete parameters.clickableIcons
       // delete parameters.disableDefaultUI
@@ -139,163 +130,140 @@ class GoogleMap {
       mapSettings = {
         ...mapSettings,
         ...parameters,
-      };
+      }
     }
 
     const loader = new Loader({
       apiKey: segment.Key,
       version: 'weekly',
-    });
+    })
 
     if (mapDynamic.enabled) {
-      const wrapper = document.getElementById('wrapper');
+      const wrapper = document.getElementById('wrapper')
 
       if (mapDynamic.preview) {
-        const url = 'https://maps.googleapis.com/maps/api/staticmap';
-        wrapper.style.backgroundImage = `url(${url}?center=${mapSettings.center.lat},${mapSettings.center.lng}&zoom=${mapSettings.zoom}&scale=2&size=${wrapper.clientWidth}x${wrapper.clientHeight}&key=${segment.Key})`;
+        const url = 'https://maps.googleapis.com/maps/api/staticmap'
+        wrapper.style.backgroundImage = `url(${url}?center=${mapSettings.center.lat},${mapSettings.center.lng}&zoom=${mapSettings.zoom}&scale=2&size=${wrapper.clientWidth}x${wrapper.clientHeight}&key=${segment.Key})`
       }
 
       wrapper.addEventListener('click', () => {
-        wrapper.remove();
+        wrapper.remove()
         loader.load().then(() => {
-          const map = new google.maps.Map(mapElement, mapSettings);
-          this.mapOverviewInit(map, mapOverview, mapElement, mapSettings);
-          this.markerHandler(map, segment, parameters, null);
+          const map = new google.maps.Map(mapElement, mapSettings)
+          this.mapOverviewInit(map, mapOverview, mapElement, mapSettings)
+          this.markerHandler(map, segment, parameters, null)
 
           // callback
           if (window.goldfinch && window.goldfinch.map_callback) {
-            window.goldfinch.map_callback(
-              map,
-              mapSettings,
-              segment,
-              parameters,
-            );
+            window.goldfinch.map_callback(map, mapSettings, segment, parameters)
           }
-        });
-      });
-    } else {
+        })
+      })
+    }
+    else {
       loader.load().then(async () => {
-        let loadAdvancedMarker = false;
+        let loadAdvancedMarker = false
 
         if (segment.Markers.length) {
           segment.Markers.forEach((e, i) => {
             if (e.Parameters) {
-              e.Parameters = JSON.parse(e.Parameters);
+              e.Parameters = JSON.parse(e.Parameters)
 
-              if (
-                e.Parameters &&
-                e.Parameters.marker_type.markerType == 'AdvancedMarker' &&
-                !loadAdvancedMarker
-              ) {
-                loadAdvancedMarker = true;
+              if (e.Parameters && e.Parameters.marker_type.markerType == 'AdvancedMarker' && !loadAdvancedMarker) {
+                loadAdvancedMarker = true
               }
             }
-          });
+          })
         }
 
-        const { Map } = await google.maps.importLibrary('maps');
+        const { Map } = await google.maps.importLibrary('maps')
 
         if (parameters.mapId && loadAdvancedMarker) {
-          var { AdvancedMarkerElement } =
-            await google.maps.importLibrary('marker');
-        } else {
-          var AdvancedMarkerElement = null;
+          var { AdvancedMarkerElement } = await google.maps.importLibrary('marker')
+        }
+        else {
+          var AdvancedMarkerElement = null
         }
 
-        const map = new Map(mapElement, mapSettings);
+        const map = new Map(mapElement, mapSettings)
 
-        this.mapOverviewInit(map, mapOverview, mapElement, mapSettings);
-        this.markerHandler(map, segment, parameters, AdvancedMarkerElement);
+        this.mapOverviewInit(map, mapOverview, mapElement, mapSettings)
+        this.markerHandler(map, segment, parameters, AdvancedMarkerElement)
 
         // callback
         if (window.goldfinch && window.goldfinch.map_callback) {
-          window.goldfinch.map_callback(map, mapSettings, segment, parameters);
+          window.goldfinch.map_callback(map, mapSettings, segment, parameters)
         }
-      });
+      })
     }
   }
 
   markerHandler(map, segment, parameters, AdvancedMarkerElement) {
     if (segment.Markers.length) {
       segment.Markers.forEach((e, i) => {
-        let marker;
+        let marker
 
         if (e.Parameters) {
-          const markerPosition = { lat: e.Latitude, lng: e.Longitude };
+          const markerPosition = { lat: e.Latitude, lng: e.Longitude }
 
           const markerParams = {
             position: markerPosition,
             map,
             title: e.Title,
-          };
-
-          if (typeof e.Parameters !== 'object') {
-            e.Parameters = JSON.parse(e.Parameters);
           }
 
-          if (
-            e.Parameters.marker_type.markerType == 'AdvancedMarker' &&
-            AdvancedMarkerElement
-          ) {
+          if (typeof e.Parameters !== 'object') {
+            e.Parameters = JSON.parse(e.Parameters)
+          }
+
+          if (e.Parameters.marker_type.markerType == 'AdvancedMarker' && AdvancedMarkerElement) {
             // AdvancedMarker
             // console.log('AdvancedMarker')
 
             if (e.Parameters.marker_type.markerCustomHTML && e.InfoWindow) {
-              const customContent = document.createElement('div');
-              customContent.classList.add('custom-map-marker-wrapper');
-              customContent.innerHTML = e.InfoWindow;
-              markerParams.content = customContent;
+              const customContent = document.createElement('div')
+              customContent.classList.add('custom-map-marker-wrapper')
+              customContent.innerHTML = e.InfoWindow
+              markerParams.content = customContent
             }
 
-            markerParams.gmpDraggable = e.Parameters.marker_type.draggable;
+            markerParams.gmpDraggable = e.Parameters.marker_type.draggable
 
             // init marker
-            marker = new AdvancedMarkerElement(markerParams);
+            marker = new AdvancedMarkerElement(markerParams)
 
             // callback
             if (window.goldfinch && window.goldfinch.marker_callback) {
-              window.goldfinch.marker_callback(
-                marker,
-                markerParams,
-                e,
-                map,
-                segment,
-                parameters,
-              );
+              window.goldfinch.marker_callback(marker, markerParams, e, map, segment, parameters)
             }
-          } else {
+          }
+          else {
             // console.log('Marker')
 
             // Marker
 
             if (
-              e.Parameters.marker_type.markerFont &&
-              e.Parameters.marker_type.markerFontFamily &&
-              e.Parameters.marker_type.markerFontCode
+              e.Parameters.marker_type.markerFont
+              && e.Parameters.marker_type.markerFontFamily
+              && e.Parameters.marker_type.markerFontCode
             ) {
-              markerParams.icon = ' ';
+              markerParams.icon = ' '
               markerParams.label = {
                 fontFamily: e.Parameters.marker_type.markerFontFamily,
                 text: decodeURIComponent(
-                  JSON.parse(
-                    `"${e.Parameters.marker_type.markerFontCode.replace(
-                      /\"/g,
-                      '\\"',
-                    )}"`,
-                  ),
+                  JSON.parse(`"${e.Parameters.marker_type.markerFontCode.replace(/\"/g, '\\"')}"`),
                 ),
-              };
+              }
 
               if (e.Parameters.marker_type.markerFontColor) {
-                markerParams.label.color =
-                  e.Parameters.marker_type.markerFontColor;
+                markerParams.label.color = e.Parameters.marker_type.markerFontColor
               }
 
               if (e.Parameters.marker_type.markerFontSize) {
-                markerParams.label.fontSize =
-                  e.Parameters.marker_type.markerFontSize;
+                markerParams.label.fontSize = e.Parameters.marker_type.markerFontSize
               }
-            } else if (e.Icon) {
+            }
+            else if (e.Icon) {
               const iconSet = {
                 url: e.Icon,
                 // This marker is 150 pixels wide by 150 pixels high.
@@ -303,117 +271,87 @@ class GoogleMap {
                 // The origin for this image is (0, 0).
                 // origin: new google.maps.Point(0, 0),
                 // optimized: true
-              };
+              }
 
-              if (
-                e.Parameters.marker_type.markerScaleWidth ||
-                e.Parameters.marker_type.markerScaleHeight
-              ) {
+              if (e.Parameters.marker_type.markerScaleWidth || e.Parameters.marker_type.markerScaleHeight) {
                 iconSet.scaledSize = new google.maps.Size(
                   e.Parameters.marker_type.markerScaleWidth,
                   e.Parameters.marker_type.markerScaleHeight,
-                );
+                )
               }
 
               // The anchor for this image is the base of the flagpole at (0, 150).
-              if (
-                e.Parameters.marker_type.markerAnchorX ||
-                e.Parameters.marker_type.markerAnchorY
-              ) {
+              if (e.Parameters.marker_type.markerAnchorX || e.Parameters.marker_type.markerAnchorY) {
                 iconSet.anchor = new google.maps.Point(
                   e.Parameters.marker_type.markerAnchorX,
                   e.Parameters.marker_type.markerAnchorY,
-                );
+                )
               }
 
-              markerParams.icon = iconSet;
+              markerParams.icon = iconSet
               // markerParams.optimized = false;
             }
 
             // animation
             if (e.Parameters && e.Parameters.marker_type.markerAnimation) {
-              markerParams.animation =
-                google.maps.Animation[e.Parameters.marker_type.markerAnimation];
+              markerParams.animation = google.maps.Animation[e.Parameters.marker_type.markerAnimation]
             }
 
             // init marker
-            marker = new google.maps.Marker(markerParams);
+            marker = new google.maps.Marker(markerParams)
 
             // callback
             if (window.goldfinch && window.goldfinch.marker_callback) {
-              window.goldfinch.marker_callback(
-                marker,
-                markerParams,
-                e,
-                map,
-                segment,
-                parameters,
-              );
+              window.goldfinch.marker_callback(marker, markerParams, e, map, segment, parameters)
             }
           }
 
           // info window
 
-          if (
-            e.Parameters &&
-            e.Parameters.info_window.infoWindow &&
-            e.InfoWindow
-          ) {
+          if (e.Parameters && e.Parameters.info_window.infoWindow && e.InfoWindow) {
             const infowindowParams = {
               content: e.InfoWindow,
               ariaLabel: e.Title,
-            };
+            }
 
             if (e.Parameters.info_window.infoWindowMaxWidth) {
-              infowindowParams.maxWidth =
-                e.Parameters.info_window.infoWindowMaxWidth;
+              infowindowParams.maxWidth = e.Parameters.info_window.infoWindowMaxWidth
             }
 
             if (e.Parameters.info_window.infoWindowMinWidth) {
-              infowindowParams.minWidth =
-                e.Parameters.info_window.infoWindowMinWidth;
+              infowindowParams.minWidth = e.Parameters.info_window.infoWindowMinWidth
             }
 
-            const infowindow = new google.maps.InfoWindow(infowindowParams);
+            const infowindow = new google.maps.InfoWindow(infowindowParams)
 
             marker.addListener('click', () => {
               infowindow.open({
                 anchor: marker,
                 map,
-              });
-            });
+              })
+            })
 
             // callback
             if (window.goldfinch && window.goldfinch.infoWindow_callback) {
-              window.goldfinch.infoWindow_callback(
-                infowindow,
-                infowindowParams,
-                marker,
-                map,
-                e,
-                segment,
-                parameters,
-              );
+              window.goldfinch.infoWindow_callback(infowindow, infowindowParams, marker, map, e, segment, parameters)
             }
           }
         }
-      });
+      })
     }
   }
 
   mapOverviewInit(map, mapOverview, mapElement, mapSettings) {
     if (mapOverview) {
-      const OVERVIEW_DIFFERENCE = 5;
-      const OVERVIEW_MIN_ZOOM = 3;
-      const OVERVIEW_MAX_ZOOM = 10;
+      const OVERVIEW_DIFFERENCE = 5
+      const OVERVIEW_MIN_ZOOM = 3
+      const OVERVIEW_MAX_ZOOM = 10
 
-      let overviewEl = mapElement.getAttribute('data-map-segment');
-      overviewEl = document.querySelector(
-        `[data-map-overview="${overviewEl}"]`,
-      );
+      let overviewEl = mapElement.getAttribute('data-map-segment')
+      overviewEl = document.querySelector(`[data-map-overview="${overviewEl}"]`)
 
       // here in case dynamic load is enabled
-      overviewEl.style.display = 'block';
+      overviewEl.style.display = 'block'
 
       const overview = new google.maps.Map(overviewEl, {
         ...mapSettings,
@@ -424,24 +362,18 @@ class GoogleMap {
         scaleControl: false,
         streetViewControl: false,
         zoomControl: false,
-      });
+      })
 
       function clamp(num, min, max) {
-        return Math.min(Math.max(num, min), max);
+        return Math.min(Math.max(num, min), max)
       }
 
       map.addListener('bounds_changed', () => {
-        overview.setCenter(map.getCenter());
-        overview.setZoom(
-          clamp(
-            map.getZoom() - OVERVIEW_DIFFERENCE,
-            OVERVIEW_MIN_ZOOM,
-            OVERVIEW_MAX_ZOOM,
-          ),
-        );
-      });
+        overview.setCenter(map.getCenter())
+        overview.setZoom(clamp(map.getZoom() - OVERVIEW_DIFFERENCE, OVERVIEW_MIN_ZOOM, OVERVIEW_MAX_ZOOM))
+      })
     }
   }
 }
 
-export default GoogleMap;
+export default GoogleMap

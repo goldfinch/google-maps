@@ -2,8 +2,8 @@
 
 namespace Goldfinch\GoogleMaps\Commands;
 
-use Goldfinch\Taz\Services\Templater;
 use Goldfinch\Taz\Console\GeneratorCommand;
+use Goldfinch\Taz\Services\Templater;
 
 #[AsCommand(name: 'vendor:google-maps:templates')]
 class MapsTemplatesCommand extends GeneratorCommand
@@ -22,8 +22,8 @@ class MapsTemplatesCommand extends GeneratorCommand
 
         if (is_string($theme)) {
 
-            $componentPath = BASE_PATH . '/vendor/goldfinch/google-maps/templates/Goldfinch/GoogleMaps/Models/';
-            $themePath = 'themes/' . $theme . '/templates/Goldfinch/GoogleMaps/Models/';
+            $componentPath = BASE_PATH.'/vendor/goldfinch/google-maps/templates/Goldfinch/GoogleMaps/Models/';
+            $themePath = 'themes/'.$theme.'/templates/Goldfinch/GoogleMaps/Models/';
 
             $files = [
                 // no need to customize MapBlock
@@ -32,8 +32,8 @@ class MapsTemplatesCommand extends GeneratorCommand
                 //     'to' => $themePath . 'Blocks/MapBlock.ss',
                 // ],
                 [
-                    'from' => $componentPath . 'MapSegment.ss',
-                    'to' => $themePath . 'MapSegment.ss',
+                    'from' => $componentPath.'MapSegment.ss',
+                    'to' => $themePath.'MapSegment.ss',
                 ],
             ];
 

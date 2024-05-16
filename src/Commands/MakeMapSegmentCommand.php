@@ -2,11 +2,11 @@
 
 namespace Goldfinch\GoogleMaps\Commands;
 
-use Goldfinch\Taz\Services\Templater;
 use Goldfinch\Taz\Console\GeneratorCommand;
-use Symfony\Component\Filesystem\Filesystem;
+use Goldfinch\Taz\Services\Templater;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Filesystem\Filesystem;
 
 #[AsCommand(name: 'make:map-segment')]
 class MakeMapSegmentCommand extends GeneratorCommand
@@ -21,7 +21,7 @@ class MakeMapSegmentCommand extends GeneratorCommand
     {
         $segmentName = $this->askClassNameQuestion('Name of the segment (eg: Branch, Office)', $input, $output);
 
-        if (!$segmentName) {
+        if (! $segmentName) {
             return Command::FAILURE;
         }
 
@@ -33,13 +33,13 @@ class MakeMapSegmentCommand extends GeneratorCommand
         $theme = $templater->defineTheme();
 
         $fs->copy(
-            BASE_PATH .
+            BASE_PATH.
                 '/vendor/goldfinch/google-maps/components/segment.json',
             'app/_schema/map-'.$segmentName.'.json',
         );
 
         $fs->copy(
-            BASE_PATH .
+            BASE_PATH.
                 '/vendor/goldfinch/google-maps/templates/Goldfinch/GoogleMaps/Models/MapSegment.ss',
             'themes/'.$theme.'/templates/Components/Maps/'.$segmentName.'.ss',
         );
@@ -48,7 +48,7 @@ class MakeMapSegmentCommand extends GeneratorCommand
         $config = $this->findYamlConfigFileByName('app-google-maps');
 
         // create new config if not exists
-        if (!$config) {
+        if (! $config) {
 
             $command = $this->getApplication()->find('make:config');
             $command->run(new ArrayInput([
@@ -66,11 +66,11 @@ class MakeMapSegmentCommand extends GeneratorCommand
         // update config
         $this->updateYamlConfig(
             $config,
-            'Goldfinch\GoogleMaps\Models\MapSegment' . '.segment_types.' . $segmentName,
+            'Goldfinch\GoogleMaps\Models\MapSegment'.'.segment_types.'.$segmentName,
             [
-                'label' => $ucfirst . ' map',
+                'label' => $ucfirst.' map',
                 'settings' => true,
-                'markers' => true
+                'markers' => true,
             ],
         );
 

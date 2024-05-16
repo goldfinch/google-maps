@@ -2,22 +2,22 @@
 
 namespace Goldfinch\GoogleMaps\Models;
 
-use SilverStripe\Assets\File;
-use SilverStripe\ORM\DataObject;
-use SilverStripe\Forms\TextField;
-use SilverStripe\Forms\DropdownField;
-use SilverStripe\Security\Permission;
 use Goldfinch\GoogleFields\Forms\MapField;
-use SilverStripe\ORM\FieldType\DBHTMLText;
-use SilverStripe\AssetAdmin\Forms\UploadField;
-use Goldfinch\GoogleMaps\Models\MapSegment;
 use Goldfinch\JSONEditor\Forms\JSONEditorField;
 use Goldfinch\JSONEditor\ORM\FieldType\DBJSONText;
+use SilverStripe\AssetAdmin\Forms\UploadField;
+use SilverStripe\Assets\File;
+use SilverStripe\Forms\DropdownField;
+use SilverStripe\Forms\TextField;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\FieldType\DBHTMLText;
 
 class MapMarker extends DataObject
 {
     private static $table_name = 'MapMarker';
+
     private static $singular_name = 'marker';
+
     private static $plural_name = 'markers';
 
     private static $db = [
@@ -49,9 +49,9 @@ class MapMarker extends DataObject
 
     public function infoWindow()
     {
-        $path = 'Components/Maps/InfoWindows/' . $this->InfoWindowTemplate;
+        $path = 'Components/Maps/InfoWindows/'.$this->InfoWindowTemplate;
 
-        if (!ss_theme_template_file_exists($path)) {
+        if (! ss_theme_template_file_exists($path)) {
             return null;
         }
 
@@ -68,7 +68,7 @@ class MapMarker extends DataObject
         );
 
         $html = DBHTMLText::create();
-        $html->setValue('<img src="' . $url . '" alt="Preview image"/>');
+        $html->setValue('<img src="'.$url.'" alt="Preview image"/>');
 
         return $html;
     }
@@ -89,9 +89,9 @@ class MapMarker extends DataObject
 
         // scan for template files
         $dir =
-            THEMES_PATH .
-            '/' .
-            ss_theme() .
+            THEMES_PATH.
+            '/'.
+            ss_theme().
             '/templates/Components/Maps/InfoWindows/';
 
         if (is_dir($dir)) {
@@ -125,7 +125,7 @@ class MapMarker extends DataObject
 
         if ($this->ID) {
             $schemaParamsPath =
-                BASE_PATH . '/vendor/goldfinch/google-maps/_schema/marker.json';
+                BASE_PATH.'/vendor/goldfinch/google-maps/_schema/marker.json';
 
             if (file_exists($schemaParamsPath)) {
                 $schemaParams = file_get_contents($schemaParamsPath);
@@ -153,7 +153,7 @@ class MapMarker extends DataObject
     {
         parent::onBeforeWrite();
 
-        if (!$this->Parameters) {
+        if (! $this->Parameters) {
             $this->Parameters = '{"marker_type":{"markerType":"Marker","markerScaleWidth":"","markerScaleHeight":"","markerAnchorX":"","markerAnchorY":"","markerAnimation":"","markerFont":false,"markerFontFamily":"","markerFontCode":"","markerFontColor":"","markerFontSize":""},"info_window":{"infoWindow":false}}';
         }
     }

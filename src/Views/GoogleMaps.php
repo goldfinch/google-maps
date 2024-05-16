@@ -2,8 +2,8 @@
 
 namespace Goldfinch\GoogleMaps\Views;
 
-use SilverStripe\View\ViewableData;
 use Goldfinch\GoogleMaps\Models\MapSegment;
+use SilverStripe\View\ViewableData;
 
 class GoogleMaps extends ViewableData
 {
